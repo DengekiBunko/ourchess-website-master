@@ -26,8 +26,31 @@ body {
 }
 
 header {
+    position: relative;
     text-align: center;
     margin-bottom: 30px;
+}
+
+.language-selection {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-selection label {
+    font-weight: bold;
+    color: var(--dark-color);
+}
+
+.language-selection select {
+    padding: 6px 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--dark-color);
 }
 
 h1 {

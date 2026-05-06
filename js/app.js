@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ai = new ChessAI('medium');
 
     // 当前语言
-    let currentLanguage = 'zh';
+    let currentLanguage = 'en';
 
     const translations = {
         title: { zh: '国际象棋 - 双人对战与人机对战', en: 'Chess - Local and AI Play' },
