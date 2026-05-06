@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         statusWhiteToMove: { zh: '白方走棋', en: 'White to move' },
         whiteCapturedLabel: { zh: '白方吃子：', en: 'White captured:' },
         blackCapturedLabel: { zh: '黑方吃子：', en: 'Black captured:' },
+        noCaptured: { zh: '无', en: 'none' },
         moveHistory: { zh: '走棋记录', en: 'Move History' },
         newGame: { zh: '新游戏', en: 'New Game' },
         undoMove: { zh: '悔棋', en: 'Undo' },
@@ -879,7 +880,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * 格式化被吃掉的棋子
      */
     function formatCapturedPieces(capturedPieces) {
-        if (capturedPieces.length === 0) return '无';
+        if (capturedPieces.length === 0) return translateText('noCaptured');
         
         // 使用符号表示棋子
         const pieceSymbols = {
