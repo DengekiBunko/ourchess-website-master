@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('undo-move').addEventListener('click', undoMove);
     document.getElementById('play-again').addEventListener('click', newGame);
     
+    // AI难度选择
+    document.getElementById('ai-difficulty').addEventListener('change', function() {
+        ai.setDifficulty(this.value);
+    });
+    
     // 设置升变模态框事件
     setupPromotionModal();
     
@@ -211,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function setTwoPlayerMode() {
         gameMode = 'two-player';
         updateModeButtons();
+        document.getElementById('difficulty-selection').style.display = 'none';
         newGame();
     }
     
@@ -220,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function setAIMode() {
         gameMode = 'ai';
         updateModeButtons();
+        document.getElementById('difficulty-selection').style.display = 'flex';
         newGame();
     }
     
@@ -424,6 +431,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('replay-selected-title').textContent = classicGames[index].title;
         document.getElementById('status').textContent = `回放模式：${classicGames[index].title}`;
+
+        // 自动开始回放
+        startReplay();
     }
 
     function updateReplayStatus() {

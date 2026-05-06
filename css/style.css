@@ -206,12 +206,25 @@ footer a:hover {
     text-decoration: underline;
 }
 
-.learning-panel {
-    margin-top: 40px;
-    padding: 20px;
-    background-color: #f4f1e6;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+.difficulty-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.difficulty-selection label {
+    color: var(--dark-color);
+    font-weight: bold;
+}
+
+.difficulty-selection select {
+    padding: 5px 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--dark-color);
 }
 
 .learning-tabs {

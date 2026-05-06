@@ -143,12 +143,21 @@ class ChessAI {
             // 撤销移动(makeMove已经交换了玩家，所以再交换回来)
             engine.undoLastMove();
             
+            // 增加吃子奖励
+            let captureBonus = 0;
+            if (originalPiece) {
+                const capturedType = engine.getPieceType(originalPiece);
+                captureBonus = this.pieceValues[capturedType] * 0.1; // 吃子奖励
+            }
+            
             if (isMaximizingPlayer) {
+                value += captureBonus;
                 if (value > bestValue) {
                     bestValue = value;
                     bestMove = move;
                 }
             } else {
+                value -= captureBonus;
                 if (value < bestValue) {
                     bestValue = value;
                     bestMove = move;
