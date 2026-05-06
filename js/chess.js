@@ -804,19 +804,27 @@ class ChessEngine {
     }
 
     // 获取游戏状态描述
-    getGameStatusText() {
+    getGameStatusText(lang = 'zh') {
+        const isEnglish = lang === 'en';
         if (this.isCheckmate()) {
+            if (isEnglish) {
+                return this.currentPlayer === 'w' ? 'Black wins!' : 'White wins!';
+            }
             return this.currentPlayer === 'w' ? '黑方胜利！' : '白方胜利！';
         } else if (this.isStalemate()) {
-            return '和局：逼和';
+            return isEnglish ? 'Draw: stalemate' : '和局：逼和';
         } else if (this.isDrawByMaterial()) {
-            return '和局：子力不足';
+            return isEnglish ? 'Draw: insufficient material' : '和局：子力不足';
         } else if (this.halfMoveClock >= 100) {
-            return '和局：50回合规则';
+            return isEnglish ? 'Draw: 50-move rule' : '和局：50回合规则';
         } else if (this.isKingInCheck(this.currentPlayer)) {
-            return (this.currentPlayer === 'w' ? '白方' : '黑方') + '被将军';
+            return isEnglish
+                ? (this.currentPlayer === 'w' ? 'White is in check' : 'Black is in check')
+                : (this.currentPlayer === 'w' ? '白方' : '黑方') + '被将军';
         } else {
-            return (this.currentPlayer === 'w' ? '白方' : '黑方') + '走棋';
+            return isEnglish
+                ? (this.currentPlayer === 'w' ? 'White to move' : 'Black to move')
+                : (this.currentPlayer === 'w' ? '白方' : '黑方') + '走棋';
         }
     }
 

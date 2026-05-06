@@ -8,7 +8,116 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化AI
     const ai = new ChessAI('medium');
-    
+
+    // 当前语言
+    let currentLanguage = 'zh';
+
+    const translations = {
+        title: { zh: '国际象棋 - 双人对战与人机对战', en: 'Chess - Local and AI Play' },
+        headerTitle: { zh: '国际象棋', en: 'Chess' },
+        languageLabel: { zh: '语言：', en: 'Language:' },
+        twoPlayerMode: { zh: '双人对战', en: 'Two Player' },
+        aiMode: { zh: '人机对战', en: 'Play vs AI' },
+        aiDifficulty: { zh: 'AI难度：', en: 'AI Difficulty:' },
+        difficultyEasy: { zh: '简单', en: 'Easy' },
+        difficultyMedium: { zh: '中等', en: 'Medium' },
+        difficultyHard: { zh: '困难', en: 'Hard' },
+        statusWhiteToMove: { zh: '白方走棋', en: 'White to move' },
+        whiteCapturedLabel: { zh: '白方吃子：', en: 'White captured:' },
+        blackCapturedLabel: { zh: '黑方吃子：', en: 'Black captured:' },
+        moveHistory: { zh: '走棋记录', en: 'Move History' },
+        newGame: { zh: '新游戏', en: 'New Game' },
+        undoMove: { zh: '悔棋', en: 'Undo' },
+        tutorialTab: { zh: '教程', en: 'Tutorial' },
+        strategyTab: { zh: '策略文章', en: 'Strategy Articles' },
+        classicTab: { zh: '经典对局', en: 'Classic Games' },
+        tutorialTitle: { zh: '国际象棋入门教程', en: 'Chess Tutorial' },
+        tutorialIntro: { zh: '本教程带你快速了解棋盘布局、棋子走法和基本规则，让你能立即开始对局。', en: 'Learn the board setup, piece movement, and basic rules so you can start playing right away.' },
+        tutorialBoardTitle: { zh: '棋盘与棋子', en: 'Board and Pieces' },
+        tutorialBoardLine1: { zh: '棋盘由8×8格组成，横线为1-8，竖线为a-h。', en: 'The board has 8×8 squares with ranks 1-8 and files a-h.' },
+        tutorialBoardLine2: { zh: '白方先手，目标是将对方将军并迫使其无路可走。', en: 'White moves first; the goal is to checkmate the opponent and leave them with no legal moves.' },
+        tutorialMovesTitle: { zh: '基本走法', en: 'Basic Moves' },
+        tutorialPawn: { zh: '兵：直走一格，首次可走两格；吃子斜走。', en: 'Pawn: moves forward one square, two on first move; captures diagonally.' },
+        tutorialRook: { zh: '车：直线移动，可横向或纵向任意格。', en: 'Rook: moves straight along files or ranks.' },
+        tutorialKnight: { zh: '马：走“日”字，可跳过其他棋子。', en: 'Knight: moves in an L-shape and can jump over pieces.' },
+        tutorialBishop: { zh: '象：斜线移动，不能隔子。', en: 'Bishop: moves diagonally and cannot jump.' },
+        tutorialQueen: { zh: '后：横、纵、斜任意移动，是最强棋子。', en: 'Queen: moves in any direction, making it the most powerful piece.' },
+        tutorialKing: { zh: '王：一步之内移动，可左右、前后、斜走。', en: 'King: moves one square in any direction.' },
+        tutorialOpeningTitle: { zh: '开局建议', en: 'Opening Advice' },
+        tutorialOpeningText: { zh: '建议先发展中心兵、骑士和象，尽早完成王车易位，保持兵型稳固。', en: 'Develop center pawns, knights, and bishops early, castle soon, and keep a solid pawn structure.' },
+        strategyTitle: { zh: '策略文章精选', en: 'Strategy Highlights' },
+        previousPage: { zh: '上一页', en: 'Previous' },
+        nextPage: { zh: '下一页', en: 'Next' },
+        classicTitle: { zh: '经典对局库', en: 'Classic Game Library' },
+        classicDescription: { zh: '这里列出经典开局和实战片段，选择后可进入回放观看每一步变化。', en: 'Browse classic openings and game fragments, then replay each move step by step.' },
+        currentGameLabel: { zh: '当前对局：', en: 'Current game:' },
+        noGameSelected: { zh: '未选择对局', en: 'No game selected' },
+        replayPrev: { zh: '上一步', en: 'Previous' },
+        replayPlay: { zh: '播放', en: 'Play' },
+        replayPause: { zh: '暂停', en: 'Pause' },
+        replayNext: { zh: '下一步', en: 'Next' },
+        replayReset: { zh: '重置', en: 'Reset' },
+        replayPrompt: { zh: '请选择一局经典对局开始回放。', en: 'Select a classic game to start replay.' },
+        promotionSelect: { zh: '请选择升变的棋子', en: 'Choose a promotion piece' },
+        playAgain: { zh: '再来一局', en: 'Play Again' },
+        selectGame: { zh: '选择对局', en: 'Select game' },
+        footerPrefix: { zh: '国际象棋游戏', en: 'Chess Game' },
+        footerLink: { zh: 'GitHub', en: 'GitHub' },
+        aiThinking: { zh: '黑方(AI)正在思考...', en: 'Black (AI) is thinking...' },
+        pageInfo: { zh: '第 {0} / {1} 页', en: 'Page {0} / {1}' },
+        replayStatusCurrent: { zh: '当前：{0} / 步数 {1} / {2}', en: 'Current: {0} / move {1} / {2}' },
+        replayMode: { zh: '回放模式：{0}', en: 'Replay mode: {0}' },
+        strategySummary: { zh: '开局示范 {0} 步', en: 'Opening demonstration {0} moves' }
+    };
+
+    function translateText(key) {
+        return (translations[key] && translations[key][currentLanguage]) || '';
+    }
+
+    function formatText(key, ...args) {
+        let text = translateText(key);
+        args.forEach((value, index) => {
+            text = text.replace(`{${index}}`, value);
+        });
+        return text;
+    }
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        translateUI();
+        renderClassicGameList();
+        renderStrategyPage();
+        updateUI();
+    }
+
+    function translateUI() {
+        document.title = translateText('title');
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const text = translateText(key);
+            if (text) {
+                el.textContent = text;
+            }
+        });
+        const strategyPageInfo = document.getElementById('strategy-page-info');
+        if (strategyPageInfo) {
+            const totalPages = Math.max(1, Math.ceil(strategyArticles.length / articlesPerPage));
+            strategyPageInfo.textContent = formatText('pageInfo', currentStrategyPage, totalPages);
+        }
+
+        const selectedTitle = document.getElementById('replay-selected-title');
+        if (replayState.currentGameIndex !== null) {
+            const selectedGame = classicGames[replayState.currentGameIndex];
+            if (selectedGame) {
+                selectedTitle.textContent = selectedGame.title[currentLanguage] || selectedGame.title.zh;
+                updateReplayStatus();
+            }
+        } else if (selectedTitle) {
+            selectedTitle.textContent = translateText('noGameSelected');
+        }
+    }
+
     // 初始化棋盘UI
     const boardElement = document.getElementById('chessboard');
     const chessboard = new ChessboardUI(boardElement, {
@@ -38,6 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // AI难度选择
     document.getElementById('ai-difficulty').addEventListener('change', function() {
         ai.setDifficulty(this.value);
+    });
+
+    // 语言切换
+    document.getElementById('language-select').addEventListener('change', function() {
+        setLanguage(this.value);
     });
     
     // 设置升变模态框事件
@@ -241,8 +355,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // 经典对局列表
     const classicGames = [
         {
-            title: '经典义大利开局',
-            description: '展示快速发展骑士与象的开局思路。',
+            title: {
+                zh: '经典义大利开局',
+                en: 'Classic Italian Opening'
+            },
+            description: {
+                zh: '展示快速发展骑士与象的开局思路。',
+                en: 'Shows a quick development of knights and bishops in the opening.'
+            },
             moves: [
                 [6,4,4,4], [1,4,3,4], [7,6,5,5], [0,1,2,2], [7,5,4,2], [0,6,2,5],
                 [6,3,4,3], [1,3,3,3], [7,4,7,6], [0,2,2,4]
@@ -250,8 +370,14 @@ document.addEventListener('DOMContentLoaded', function() {
             notation: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd4', 'd5', 'O-O', 'Be7']
         },
         {
-            title: '西西里防御变例',
-            description: '一个具有典型战斗风格的现代防御实例。',
+            title: {
+                zh: '西西里防御变例',
+                en: 'Sicilian Defense Variation'
+            },
+            description: {
+                zh: '一个具有典型战斗风格的现代防御实例。',
+                en: 'A modern defense example with a typical tactical style.'
+            },
             moves: [
                 [6,4,4,4], [1,6,3,6], [7,6,5,5], [0,1,2,2], [6,3,4,3], [1,4,2,4],
                 [7,5,4,2], [0,6,2,5], [7,4,7,6], [0,3,3,3]
@@ -259,8 +385,14 @@ document.addEventListener('DOMContentLoaded', function() {
             notation: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6']
         },
         {
-            title: '伦敦体系示范',
-            description: '稳健的战略布局，适合控制中心与后翼攻防。',
+            title: {
+                zh: '伦敦体系示范',
+                en: 'London System Example'
+            },
+            description: {
+                zh: '稳健的战略布局，适合控制中心与后翼攻防。',
+                en: 'A solid strategic setup for center control and flank play.'
+            },
             moves: [
                 [6,3,5,3], [1,4,3,4], [7,6,5,5], [0,6,2,5], [7,2,5,4], [0,1,2,2],
                 [7,5,3,3], [1,3,3,3], [7,4,7,6], [0,2,2,4]
@@ -268,8 +400,14 @@ document.addEventListener('DOMContentLoaded', function() {
             notation: ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'Bf5', 'e3', 'e6', 'Bd3', 'Bd6']
         },
         {
-            title: '残局练习：车兵残局',
-            description: '演示简单的车兵残局推进与对抗。',
+            title: {
+                zh: '残局练习：车兵残局',
+                en: 'Endgame Practice: Rook and Pawn'
+            },
+            description: {
+                zh: '演示简单的车兵残局推进与对抗。',
+                en: 'A simple rook and pawn endgame demonstration.'
+            },
             moves: [
                 [6,4,4,4], [1,4,3,4], [7,6,5,5], [0,1,2,2], [6,3,4,3], [1,3,3,3],
                 [7,7,5,7], [0,7,2,7], [6,5,4,5], [1,5,3,5]
@@ -287,54 +425,144 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const strategyArticles = [
         {
-            title: '控制中心',
-            summary: '掌控中心能让棋子更灵活，限制对方活动范围。',
-            content: '稳定的中心控制可以为中局铺平道路。通过兵和轻子占据或施压d4、e4、d5、e5四个格子，你可以获得更广泛的活动空间，同时让对手的布局受到限制。'
+            title: {
+                zh: '控制中心',
+                en: 'Control the Center'
+            },
+            summary: {
+                zh: '掌控中心能让棋子更灵活，限制对方活动范围。',
+                en: 'Controlling the center gives your pieces more flexibility and limits your opponent.'
+            },
+            content: {
+                zh: '稳定的中心控制可以为中局铺平道路。通过兵和轻子占据或施压d4、e4、d5、e5四个格子，你可以获得更广泛的活动空间，同时让对手的布局受到限制。',
+                en: 'A stable center sets up the middlegame. Occupying or pressuring d4, e4, d5, and e5 gives you more space while restricting your opponent.'
+            }
         },
         {
-            title: '快速发展',
-            summary: '前期不要多次移动同一子力，优先完成王车易位。',
-            content: '开局阶段的目标是快速把骑士和象发展出来，减少边兵无为移动。优先完成王车易位，构建坚固的防守基础，为后续中局攻防争取时间。'
+            title: {
+                zh: '快速发展',
+                en: 'Quick Development'
+            },
+            summary: {
+                zh: '前期不要多次移动同一子力，优先完成王车易位。',
+                en: 'Avoid moving the same piece repeatedly early; prioritize castling.'
+            },
+            content: {
+                zh: '开局阶段的目标是快速把骑士和象发展出来，减少边兵无为移动。优先完成王车易位，构建坚固的防守基础，为后续中局攻防争取时间。',
+                en: 'In the opening, develop knights and bishops quickly, avoid pointless pawn moves, and castle early to build a strong defense.'
+            }
         },
         {
-            title: '王安全',
-            summary: '保持王附近兵形完整，避免过早开启中心战线。',
-            content: '王车易位后，保持h、g、f线的防护结构非常重要。不要轻易打开王翼或中心兵线，除非你已做好充分准备。'
+            title: {
+                zh: '王安全',
+                en: 'King Safety'
+            },
+            summary: {
+                zh: '保持王附近兵形完整，避免过早开启中心战线。',
+                en: 'Keep the pawn structure around your king intact and avoid opening the center too early.'
+            },
+            content: {
+                zh: '王车易位后，保持h、g、f线的防护结构非常重要。不要轻易打开王翼或中心兵线，除非你已做好充分准备。',
+                en: 'After castling, keep the h-, g-, and f-files protected. Don’t open the kingside or center unless you are fully prepared.'
+            }
         },
         {
-            title: '兵结构',
-            summary: '理解联兵、孤兵、双兵的优缺点，是提高战略理解的关键。',
-            content: '稳固的兵形会决定后续战斗的成败。联兵可形成支撑，孤兵和双兵则容易成为敌方进攻目标，因此在交换时要考虑兵结构的长期影响。'
+            title: {
+                zh: '兵结构',
+                en: 'Pawn Structure'
+            },
+            summary: {
+                zh: '理解联兵、孤兵、双兵的优缺点，是提高战略理解的关键。',
+                en: 'Understanding pawn chains, isolated pawns, and doubled pawns is key to strategic play.'
+            },
+            content: {
+                zh: '稳固的兵形会决定后续战斗的成败。联兵可形成支撑，孤兵和双兵则容易成为敌方进攻目标，因此在交换时要考虑兵结构的长期影响。',
+                en: 'A solid pawn structure often decides the battle. Pawn chains support each other, while isolated and doubled pawns become targets.'
+            }
         },
         {
-            title: '钉住与牵制',
-            summary: '通过牵制对方重要棋子，限制对手的解围手段。',
-            content: '钉住和牵制能迫使对方被动防守。典型手段是在中心建立压力，利用象、后、车对敌方骑士或王翼形成钉住。'
+            title: {
+                zh: '钉住与牵制',
+                en: 'Pins and Skewers'
+            },
+            summary: {
+                zh: '通过牵制对方重要棋子，限制对手的解围手段。',
+                en: 'Use pins and skewers to limit your opponent’s ability to defend.'
+            },
+            content: {
+                zh: '钉住和牵制能迫使对方被动防守。典型手段是在中心建立压力，利用象、后、车对敌方骑士或王翼形成钉住。',
+                en: 'Pins and skewers can force passive defense. Pressure the center and use bishops, queens, and rooks to pin knights or the king.'
+            }
         },
         {
-            title: '残局思想',
-            summary: '进入残局时，棋王活动性与兵推进最为关键。',
-            content: '残局阶段要争取棋王参与，同时注意兵的通路。多数残局中，王的活动范围决定胜负，保持通路和避免被锁死是取胜的关键。'
+            title: {
+                zh: '残局思想',
+                en: 'Endgame Thinking'
+            },
+            summary: {
+                zh: '进入残局时，棋王活动性与兵推进最为关键。',
+                en: 'In the endgame, king activity and pawn advancement are most important.'
+            },
+            content: {
+                zh: '残局阶段要争取棋王参与，同时注意兵的通路。多数残局中，王的活动范围决定胜负，保持通路和避免被锁死是取胜的关键。',
+                en: 'In the endgame, involve your king and secure pawn breakthroughs. King activity often determines the result.'
+            }
         },
         {
-            title: '兵力协调',
-            summary: '将轻重子协同配合比单兵强行更稳健。',
-            content: '避免孤立棋子，尽量让骑士、象和车形成联动。协调的兵力可以共同攻击弱点，也能更好地应对对手反击。'
+            title: {
+                zh: '兵力协调',
+                en: 'Piece Coordination'
+            },
+            summary: {
+                zh: '将轻重子协同配合比单兵强行更稳健。',
+                en: 'Coordinating pieces is stronger than forcing isolated actions.'
+            },
+            content: {
+                zh: '避免孤立棋子，尽量让骑士、象和车形成联动。协调的兵力可以共同攻击弱点，也能更好地应对对手反击。',
+                en: 'Avoid isolated pieces. Knights, bishops, and rooks should work together to attack weaknesses and defend against counterplay.'
+            }
         },
         {
-            title: '战术范式',
-            summary: '钉住、双击、牵制、发现攻击都是常见取胜方式。',
-            content: '学习并识别战术图式至关重要。常见主题包括钉住、双击、发现攻击、间接攻击和牵制，它们是快速获得优势的关键手段。'
+            title: {
+                zh: '战术范式',
+                en: 'Tactical Patterns'
+            },
+            summary: {
+                zh: '钉住、双击、牵制、发现攻击都是常见取胜方式。',
+                en: 'Pins, forks, skewers, and discovered attacks are common winning tactics.'
+            },
+            content: {
+                zh: '学习并识别战术图式至关重要。常见主题包括钉住、双击、发现攻击、间接攻击和牵制，它们是快速获得优势的关键手段。',
+                en: 'Learning to recognize tactical motifs is crucial. Common themes include pins, forks, discovered attacks, and deflections.'
+            }
         },
         {
-            title: '空间优势',
-            summary: '占据空间能让子力更容易进入敌方阵地。',
-            content: '空间优势意味着你有更多可移动区域，同时对手行动空间受限。通过稳步推进中心兵和侧翼兵线，你可以逐渐扩展活动范围。'
+            title: {
+                zh: '空间优势',
+                en: 'Space Advantage'
+            },
+            summary: {
+                zh: '占据空间能让子力更容易进入敌方阵地。',
+                en: 'Controlling space makes it easier for pieces to enter the opponent’s position.'
+            },
+            content: {
+                zh: '空间优势意味着你有更多可移动区域，同时对手行动空间受限。通过稳步推进中心兵和侧翼兵线，你可以逐渐扩展活动范围。',
+                en: 'Space advantage means more maneuvering room for you and less for your opponent.'
+            }
         },
         {
-            title: '交换原则',
-            summary: '当你更灵活时，尽量交换棋子；若被动则避免交换。',
-            content: '交换时要评估剩余兵形与活动性。通常在拥有更好结构、更强王翼活动时，主动换掉关键棋子会扩大优势。'
+            title: {
+                zh: '交换原则',
+                en: 'Exchange Principles'
+            },
+            summary: {
+                zh: '当你更灵活时，尽量交换棋子；若被动则避免交换。',
+                en: 'Exchange pieces when you are more active; avoid exchanges when you are cramped.'
+            },
+            content: {
+                zh: '交换时要评估剩余兵形与活动性。通常在拥有更好结构、更强王翼活动时，主动换掉关键棋子会扩大优势。',
+                en: 'Evaluate pawn structure and piece activity before trading. Stronger position often benefits from exchanges.'
+            }
         }
     ];
 
@@ -342,6 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const articlesPerPage = 3;
 
     initLearningPanel();
+    setLanguage(currentLanguage);
 
     function initLearningPanel() {
         document.querySelectorAll('.learning-tab').forEach(tab => {
@@ -374,13 +603,15 @@ document.addEventListener('DOMContentLoaded', function() {
         classicGames.forEach((game, index) => {
             const item = document.createElement('div');
             item.className = 'replay-item';
+            const title = game.title[currentLanguage] || game.title.zh;
+            const description = game.description[currentLanguage] || game.description.zh;
             item.innerHTML = `
                 <div>
-                    <h4>${game.title}</h4>
-                    <p>${game.description}</p>
-                    <p class="strategy-summary">开局示范 ${game.notation.length} 步</p>
+                    <h4>${title}</h4>
+                    <p>${description}</p>
+                    <p class="strategy-summary">${formatText('strategySummary', game.notation.length)}</p>
                 </div>
-                <button type="button" data-index="${index}">选择对局</button>
+                <button type="button" data-index="${index}">${translateText('selectGame')}</button>
             `;
 
             item.querySelector('button').addEventListener('click', () => selectClassicGame(index));
@@ -400,16 +631,19 @@ document.addEventListener('DOMContentLoaded', function() {
         pageArticles.forEach(article => {
             const item = document.createElement('article');
             item.className = 'strategy-item';
+            const title = article.title[currentLanguage] || article.title.zh;
+            const summary = article.summary[currentLanguage] || article.summary.zh;
+            const content = article.content[currentLanguage] || article.content.zh;
             item.innerHTML = `
-                <h3>${article.title}</h3>
-                <p class="strategy-summary">${article.summary}</p>
-                <p>${article.content}</p>
+                <h3>${title}</h3>
+                <p class="strategy-summary">${summary}</p>
+                <p>${content}</p>
             `;
             list.appendChild(item);
         });
 
         const totalPages = Math.ceil(strategyArticles.length / articlesPerPage);
-        info.textContent = `第 ${currentStrategyPage} / ${totalPages} 页`;
+        info.textContent = formatText('pageInfo', currentStrategyPage, totalPages);
     }
 
     function changeStrategyPage(delta) {
@@ -429,8 +663,10 @@ document.addEventListener('DOMContentLoaded', function() {
         updateUI();
         updateReplayStatus();
 
-        document.getElementById('replay-selected-title').textContent = classicGames[index].title;
-        document.getElementById('status').textContent = `回放模式：${classicGames[index].title}`;
+        const game = classicGames[index];
+        const title = game.title[currentLanguage] || game.title.zh;
+        document.getElementById('replay-selected-title').textContent = title;
+        document.getElementById('status').textContent = formatText('replayMode', title);
 
         // 自动开始回放
         startReplay();
@@ -439,12 +675,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateReplayStatus() {
         const status = document.getElementById('replay-status');
         if (replayState.currentGameIndex === null) {
-            status.textContent = '请选择一局对局开始回放。';
+            status.textContent = translateText('replayPrompt');
             return;
         }
 
         const game = classicGames[replayState.currentGameIndex];
-        status.textContent = `当前：${game.title} / 步数 ${replayState.currentStep} / ${game.moves.length}`;
+        const title = game.title[currentLanguage] || game.title.zh;
+        status.textContent = formatText('replayStatusCurrent', title, replayState.currentStep, game.moves.length);
     }
 
     function applyReplayStep(step) {
@@ -579,7 +816,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isAIThinking = true;
         
         // 更新状态文本
-        document.getElementById('status').textContent = '黑方(AI)正在思考...';
+        document.getElementById('status').textContent = translateText('aiThinking');
         
         // 使用setTimeout让UI先刷新状态
         setTimeout(async () => {
@@ -618,7 +855,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chessboard.updateBoard(engine.board);
         
         // 更新状态文本
-        document.getElementById('status').textContent = engine.getGameStatusText();
+        document.getElementById('status').textContent = engine.getGameStatusText(currentLanguage);
         
         // 更新被吃掉的棋子
         updateCapturedPieces();
@@ -634,8 +871,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const whiteCaptured = document.querySelector('.white-captured');
         const blackCaptured = document.querySelector('.black-captured');
         
-        whiteCaptured.textContent = '白方吃子：' + formatCapturedPieces(engine.capturedPieces.w);
-        blackCaptured.textContent = '黑方吃子：' + formatCapturedPieces(engine.capturedPieces.b);
+        whiteCaptured.textContent = translateText('whiteCapturedLabel') + formatCapturedPieces(engine.capturedPieces.w);
+        blackCaptured.textContent = translateText('blackCapturedLabel') + formatCapturedPieces(engine.capturedPieces.b);
     }
     
     /**
@@ -755,7 +992,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const gameOverModal = document.getElementById('game-over-modal');
         const gameResult = document.getElementById('game-result');
         
-        gameResult.textContent = engine.getGameStatusText();
+        gameResult.textContent = engine.getGameStatusText(currentLanguage);
         gameOverModal.style.display = 'flex';
     }
 });

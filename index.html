@@ -10,17 +10,24 @@
 <body>
     <div class="container">
         <header>
-            <h1>国际象棋</h1>
+            <h1 data-i18n="headerTitle">国际象棋</h1>
             <div class="mode-selection">
-                <button id="two-player-mode" class="active">双人对战</button>
-                <button id="ai-mode">人机对战</button>
+                <button id="two-player-mode" class="active" data-i18n="twoPlayerMode">双人对战</button>
+                <button id="ai-mode" data-i18n="aiMode">人机对战</button>
+            </div>
+            <div class="language-selection">
+                <label for="language-select" data-i18n="languageLabel">语言：</label>
+                <select id="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                </select>
             </div>
             <div class="difficulty-selection" id="difficulty-selection" style="display: none;">
-                <label>AI难度：</label>
+                <label data-i18n="aiDifficulty">AI难度：</label>
                 <select id="ai-difficulty">
-                    <option value="easy">简单</option>
-                    <option value="medium" selected>中等</option>
-                    <option value="hard">困难</option>
+                    <option value="easy" data-i18n="difficultyEasy">简单</option>
+                    <option value="medium" selected data-i18n="difficultyMedium">中等</option>
+                    <option value="hard" data-i18n="difficultyHard">困难</option>
                 </select>
             </div>
         </header>
@@ -42,76 +49,76 @@
                 </div>
 
                 <div class="game-info">
-                    <div id="status">白方走棋</div>
+                    <div id="status" data-i18n="statusWhiteToMove">白方走棋</div>
                     <div class="captured-pieces">
-                        <div class="white-captured">白方吃子：</div>
-                        <div class="black-captured">黑方吃子：</div>
+                        <div class="white-captured" data-i18n="whiteCapturedLabel">白方吃子：</div>
+                        <div class="black-captured" data-i18n="blackCapturedLabel">黑方吃子：</div>
                     </div>
                     <div class="move-history">
-                        <h3>走棋记录</h3>
+                        <h3 data-i18n="moveHistory">走棋记录</h3>
                         <div id="moves"></div>
                     </div>
                     <div class="controls">
-                        <button id="new-game">新游戏</button>
-                        <button id="undo-move">悔棋</button>
+                        <button id="new-game" data-i18n="newGame">新游戏</button>
+                        <button id="undo-move" data-i18n="undoMove">悔棋</button>
                     </div>
                 </div>
             </div>
 
             <section class="learning-panel">
                 <div class="learning-tabs">
-                    <button class="learning-tab active" data-panel="tutorial-panel">教程</button>
-                    <button class="learning-tab" data-panel="strategy-panel">策略文章</button>
-                    <button class="learning-tab" data-panel="classic-panel">经典对局</button>
+                    <button class="learning-tab active" data-panel="tutorial-panel" data-i18n="tutorialTab">教程</button>
+                    <button class="learning-tab" data-panel="strategy-panel" data-i18n="strategyTab">策略文章</button>
+                    <button class="learning-tab" data-panel="classic-panel" data-i18n="classicTab">经典对局</button>
                 </div>
 
                 <div class="learning-content">
                     <div id="tutorial-panel" class="panel active">
-                        <h2>国际象棋入门教程</h2>
-                        <p>本教程带你快速了解棋盘布局、棋子走法和基本规则，让你能立即开始对局。</p>
-                        <h3>棋盘与棋子</h3>
+                        <h2 data-i18n="tutorialTitle">国际象棋入门教程</h2>
+                        <p data-i18n="tutorialIntro">本教程带你快速了解棋盘布局、棋子走法和基本规则，让你能立即开始对局。</p>
+                        <h3 data-i18n="tutorialBoardTitle">棋盘与棋子</h3>
                         <ul>
-                            <li>棋盘由8×8格组成，横线为1-8，竖线为a-h。</li>
-                            <li>白方先手，目标是将对方将军并迫使其无路可走。</li>
+                            <li data-i18n="tutorialBoardLine1">棋盘由8×8格组成，横线为1-8，竖线为a-h。</li>
+                            <li data-i18n="tutorialBoardLine2">白方先手，目标是将对方将军并迫使其无路可走。</li>
                         </ul>
-                        <h3>基本走法</h3>
+                        <h3 data-i18n="tutorialMovesTitle">基本走法</h3>
                         <ul>
-                            <li>兵：直走一格，首次可走两格；吃子斜走。</li>
-                            <li>车：直线移动，可横向或纵向任意格。</li>
-                            <li>马：走“日”字，可跳过其他棋子。</li>
-                            <li>象：斜线移动，不能隔子。</li>
-                            <li>后：横、纵、斜任意移动，是最强棋子。</li>
-                            <li>王：一步之内移动，可左右、前后、斜走。</li>
+                            <li data-i18n="tutorialPawn">兵：直走一格，首次可走两格；吃子斜走。</li>
+                            <li data-i18n="tutorialRook">车：直线移动，可横向或纵向任意格。</li>
+                            <li data-i18n="tutorialKnight">马：走“日”字，可跳过其他棋子。</li>
+                            <li data-i18n="tutorialBishop">象：斜线移动，不能隔子。</li>
+                            <li data-i18n="tutorialQueen">后：横、纵、斜任意移动，是最强棋子。</li>
+                            <li data-i18n="tutorialKing">王：一步之内移动，可左右、前后、斜走。</li>
                         </ul>
-                        <h3>开局建议</h3>
-                        <p>建议先发展中心兵、骑士和象，尽早完成王车易位，保持兵型稳固。</p>
+                        <h3 data-i18n="tutorialOpeningTitle">开局建议</h3>
+                        <p data-i18n="tutorialOpeningText">建议先发展中心兵、骑士和象，尽早完成王车易位，保持兵型稳固。</p>
                     </div>
 
                     <div id="strategy-panel" class="panel">
-                        <h2>策略文章精选</h2>
+                        <h2 data-i18n="strategyTitle">策略文章精选</h2>
                         <div id="strategy-list" class="strategy-list"></div>
                         <div class="strategy-pagination">
-                            <button id="strategy-prev" type="button">上一页</button>
+                            <button id="strategy-prev" type="button" data-i18n="previousPage">上一页</button>
                             <span id="strategy-page-info">第 1 / 1 页</span>
-                            <button id="strategy-next" type="button">下一页</button>
+                            <button id="strategy-next" type="button" data-i18n="nextPage">下一页</button>
                         </div>
                     </div>
 
                     <div id="classic-panel" class="panel">
-                        <h2>经典对局库</h2>
-                        <p>这里列出经典开局和实战片段，选择后可进入回放观看每一步变化。</p>
+                        <h2 data-i18n="classicTitle">经典对局库</h2>
+                        <p data-i18n="classicDescription">这里列出经典开局和实战片段，选择后可进入回放观看每一步变化。</p>
                         <div id="replay-current" class="replay-current">
-                            <strong>当前对局：</strong><span id="replay-selected-title">未选择对局</span>
+                            <strong data-i18n="currentGameLabel">当前对局：</strong><span id="replay-selected-title">未选择对局</span>
                         </div>
                         <div class="replay-controls">
-                            <button id="replay-prev">上一步</button>
-                            <button id="replay-play">播放</button>
-                            <button id="replay-pause">暂停</button>
-                            <button id="replay-next">下一步</button>
-                            <button id="replay-reset">重置</button>
+                            <button id="replay-prev" data-i18n="replayPrev">上一步</button>
+                            <button id="replay-play" data-i18n="replayPlay">播放</button>
+                            <button id="replay-pause" data-i18n="replayPause">暂停</button>
+                            <button id="replay-next" data-i18n="replayNext">下一步</button>
+                            <button id="replay-reset" data-i18n="replayReset">重置</button>
                         </div>
                         <div id="classic-list" class="replay-list"></div>
-                        <div id="replay-status" class="replay-status">请选择一局经典对局开始回放。</div>
+                        <div id="replay-status" class="replay-status" data-i18n="replayPrompt">请选择一局经典对局开始回放。</div>
                     </div>
                 </div>
             </section>
@@ -119,7 +126,7 @@
 
         <div id="promotion-modal" class="modal">
             <div class="modal-content">
-                <h2>请选择升变的棋子</h2>
+                <h2 data-i18n="promotionSelect">请选择升变的棋子</h2>
                 <div class="promotion-pieces">
                     <div class="piece queen" data-piece="queen"></div>
                     <div class="piece rook" data-piece="rook"></div>
@@ -132,12 +139,12 @@
         <div id="game-over-modal" class="modal">
             <div class="modal-content">
                 <h2 id="game-result"></h2>
-                <button id="play-again">再来一局</button>
+                <button id="play-again" data-i18n="playAgain">再来一局</button>
             </div>
         </div>
 
         <footer>
-            <p>国际象棋游戏 &copy; 2023 | <a href="https://github.com/DengekiBunko/ourchess-website-master" target="_blank">GitHub</a></p>
+            <p><span data-i18n="footerPrefix">国际象棋游戏</span> &copy; 2023 | <a href="https://github.com/DengekiBunko/ourchess-website-master" target="_blank" data-i18n="footerLink">GitHub</a></p>
         </footer>
     </div>
 
