@@ -206,6 +206,103 @@ footer a:hover {
     text-decoration: underline;
 }
 
+.learning-panel {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f4f1e6;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.learning-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.learning-tab {
+    padding: 10px 18px;
+    border: 1px solid rgba(52, 78, 65, 0.2);
+    background-color: white;
+    color: var(--dark-color);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.learning-tab.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.learning-content .panel {
+    display: none;
+}
+
+.learning-content .panel.active {
+    display: block;
+}
+
+.learning-content h2,
+.learning-content h3 {
+    color: var(--primary-color);
+}
+
+.learning-content p,
+.learning-content ul,
+.learning-content article {
+    margin-bottom: 15px;
+}
+
+.replay-list {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.replay-item {
+    padding: 14px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid rgba(52, 78, 65, 0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.replay-item div {
+    max-width: 75%;
+}
+
+.replay-item h4 {
+    margin-bottom: 6px;
+}
+
+.replay-list button,
+.replay-controls button {
+    min-width: 90px;
+}
+
+.replay-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.replay-status {
+    text-align: center;
+    padding: 12px 14px;
+    background-color: #e7e4d6;
+    border-radius: 8px;
+    color: var(--dark-color);
+}
+
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -216,4 +313,10 @@ footer a:hover {
         width: 100%;
         max-width: 400px;
     }
-} 
+
+    .replay-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+ 

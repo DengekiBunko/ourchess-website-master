@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 设置升变模态框事件
     setupPromotionModal();
+    initLearningPanel();
     
     /**
      * 处理棋子点击事件
@@ -45,8 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
      * 处理棋子点击事件
      */
     function handlePieceClick(row, col, piece) {
-        // 如果AI正在思考，不允许操作
-        if (isAIThinking) return;
+        // 如果AI正在思考或正在回放，不允许操作
+        if (isAIThinking || isReplayActive) return;
         
         // 如果是AI模式且当前是AI的回合，不允许操作
         if (gameMode === 'ai' && engine.currentPlayer === 'b') return;
@@ -83,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
      * 处理方格点击事件
      */
     function handleSquareClick(row, col) {
-        // 如果AI正在思考，不允许操作
-        if (isAIThinking) return;
+        // 如果AI正在思考或正在回放，不允许操作
+        if (isAIThinking || isReplayActive) return;
         
         // 如果是AI模式且当前是AI的回合，不允许操作
         if (gameMode === 'ai' && engine.currentPlayer === 'b') return;
@@ -123,8 +124,8 @@ document.addEventListener('DOMContentLoaded', function() {
      * 处理移动事件
      */
     function handleMove(fromRow, fromCol, toRow, toCol) {
-        // 如果AI正在思考，不允许操作
-        if (isAIThinking) return false;
+        // 如果AI正在思考或正在回放，不允许操作
+        if (isAIThinking || isReplayActive) return false;
         
         // 如果是AI模式且当前是AI的回合，不允许操作
         if (gameMode === 'ai' && engine.currentPlayer === 'b') return false;
@@ -230,11 +231,185 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('two-player-mode').classList.toggle('active', gameMode === 'two-player');
         document.getElementById('ai-mode').classList.toggle('active', gameMode === 'ai');
     }
-    
+
+    // 回放状态
+    const replayGames = [
+        {
+            title: '经典义大利开局',
+            description: '展示快速发展骑士与象的开局思路。',
+            moves: [
+                [6,4,4,4], [1,4,3,4], [7,6,5,5], [0,1,2,2], [7,5,4,2], [0,6,2,5],
+                [6,3,4,3], [1,3,3,3], [7,4,7,6], [0,2,2,4]
+            ],
+            notation: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd4', 'd5', 'O-O', 'Be7']
+        },
+        {
+            title: '中局控中心',
+            description: '通过中心兵和骑士构建主动布局。',
+            moves: [
+                [6,4,4,4], [1,4,3,4], [6,3,4,3], [0,6,2,5], [7,5,4,2], [1,3,3,3],
+                [7,6,5,5], [0,1,2,2], [7,4,7,6], [0,2,2,4]
+            ],
+            notation: ['e4', 'e5', 'd4', 'Nf6', 'Bc4', 'd5', 'Nf3', 'Nc6', 'O-O', 'Be7']
+        },
+        {
+            title: '残局练习：车兵残局',
+            description: '演示简单的车兵残局推进与对抗。',
+            moves: [
+                [6,4,4,4], [1,4,3,4], [7,6,5,5], [0,1,2,2], [6,3,4,3], [1,3,3,3],
+                [7,7,5,7], [0,7,2,7], [6,5,4,5], [1,5,3,5]
+            ],
+            notation: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'd5', 'Rh4', 'Rh5', 'f4', 'f5']
+        }
+    ];
+
+    let isReplayActive = false;
+    let replayState = {
+        currentGameIndex: null,
+        currentStep: 0,
+        intervalId: null
+    };
+
+    function initLearningPanel() {
+        document.querySelectorAll('.learning-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.learning-tab').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.learning-content .panel').forEach(panel => panel.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.panel).classList.add('active');
+            });
+        });
+
+        document.getElementById('replay-prev').addEventListener('click', () => stepReplay(-1));
+        document.getElementById('replay-next').addEventListener('click', () => stepReplay(1));
+        document.getElementById('replay-play').addEventListener('click', startReplay);
+        document.getElementById('replay-pause').addEventListener('click', pauseReplay);
+        document.getElementById('replay-reset').addEventListener('click', resetReplay);
+
+        renderReplayList();
+    }
+
+    function renderReplayList() {
+        const list = document.getElementById('replay-list');
+        list.innerHTML = '';
+
+        replayGames.forEach((game, index) => {
+            const item = document.createElement('div');
+            item.className = 'replay-item';
+            item.innerHTML = `
+                <div>
+                    <h4>${game.title}</h4>
+                    <p>${game.description}</p>
+                </div>
+                <button type="button" data-index="${index}">加载对局</button>
+            `;
+
+            item.querySelector('button').addEventListener('click', () => loadReplayGame(index));
+            list.appendChild(item);
+        });
+    }
+
+    function loadReplayGame(index) {
+        exitReplayMode();
+
+        replayState.currentGameIndex = index;
+        replayState.currentStep = 0;
+        isReplayActive = true;
+
+        engine.reset();
+        updateUI();
+        updateReplayStatus();
+
+        document.getElementById('status').textContent = `回放模式：${replayGames[index].title}`;
+    }
+
+    function updateReplayStatus() {
+        const status = document.getElementById('replay-status');
+        if (replayState.currentGameIndex === null) {
+            status.textContent = '请选择一局对局开始回放。';
+            return;
+        }
+
+        const game = replayGames[replayState.currentGameIndex];
+        status.textContent = `当前：${game.title} / 步数 ${replayState.currentStep} / ${game.moves.length}`;
+    }
+
+    function applyReplayStep(step) {
+        const game = replayGames[replayState.currentGameIndex];
+        if (!game) return;
+
+        engine.reset();
+        for (let i = 0; i < step; i++) {
+            const [fromRow, fromCol, toRow, toCol] = game.moves[i];
+            engine.makeMove(fromRow, fromCol, toRow, toCol);
+        }
+
+        updateUI();
+        chessboard.clearSelection();
+        chessboard.clearLastMoveHighlight();
+
+        if (step > 0) {
+            const [fromRow, fromCol, toRow, toCol] = game.moves[step - 1];
+            chessboard.highlightLastMove(fromRow, fromCol, toRow, toCol);
+        }
+    }
+
+    function stepReplay(direction) {
+        if (!isReplayActive || replayState.currentGameIndex === null) return;
+
+        const game = replayGames[replayState.currentGameIndex];
+        const nextStep = replayState.currentStep + direction;
+        if (nextStep < 0 || nextStep > game.moves.length) return;
+
+        replayState.currentStep = nextStep;
+        applyReplayStep(replayState.currentStep);
+        updateReplayStatus();
+    }
+
+    function startReplay() {
+        if (!isReplayActive || replayState.currentGameIndex === null) return;
+        if (replayState.intervalId) return;
+
+        replayState.intervalId = setInterval(() => {
+            const game = replayGames[replayState.currentGameIndex];
+            if (replayState.currentStep >= game.moves.length) {
+                pauseReplay();
+                return;
+            }
+            stepReplay(1);
+        }, 800);
+    }
+
+    function pauseReplay() {
+        if (replayState.intervalId) {
+            clearInterval(replayState.intervalId);
+            replayState.intervalId = null;
+        }
+    }
+
+    function resetReplay() {
+        if (!isReplayActive || replayState.currentGameIndex === null) return;
+        pauseReplay();
+        replayState.currentStep = 0;
+        applyReplayStep(0);
+        updateReplayStatus();
+    }
+
+    function exitReplayMode() {
+        pauseReplay();
+        isReplayActive = false;
+        replayState.currentGameIndex = null;
+        replayState.currentStep = 0;
+        document.getElementById('replay-status').textContent = '请选择一局对局开始回放。';
+        updateModeButtons();
+    }
+
     /**
      * 开始新游戏
      */
     function newGame() {
+        exitReplayMode();
         // 重置引擎
         engine.reset();
         
