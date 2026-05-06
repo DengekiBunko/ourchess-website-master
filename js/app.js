@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 设置升变模态框事件
     setupPromotionModal();
-    initLearningPanel();
     
     /**
      * 处理棋子点击事件
@@ -270,6 +269,44 @@ document.addEventListener('DOMContentLoaded', function() {
         intervalId: null
     };
 
+    const strategyArticles = [
+        {
+            title: '控制中心',
+            summary: '掌控中心能让棋子更灵活，限制对方活动范围。',
+            content: '稳定的中心控制可以为中局铺平道路。通过兵和轻子占据或施压d4、e4、d5、e5四个格子，你可以获得更广泛的活动空间，同时让对手的布局受到限制。'
+        },
+        {
+            title: '快速发展',
+            summary: '前期不要多次移动同一子力，优先完成王车易位。',
+            content: '开局阶段的目标是快速把骑士和象发展出来，减少边兵无为移动。优先完成王车易位，构建坚固的防守基础，为后续中局攻防争取时间。'
+        },
+        {
+            title: '王安全',
+            summary: '保持王附近兵形完整，避免过早开启中心战线。',
+            content: '王车易位后，保持h、g、f线的防护结构非常重要。不要轻易打开王翼或中心兵线，除非你已做好充分准备。'
+        },
+        {
+            title: '兵结构',
+            summary: '理解联兵、孤兵、双兵的优缺点，是提高战略理解的关键。',
+            content: '稳固的兵形会决定后续战斗的成败。联兵可形成支撑，孤兵和双兵则容易成为敌方进攻目标，因此在交换时要考虑兵结构的长期影响。'
+        },
+        {
+            title: '钉住与牵制',
+            summary: '通过牵制对方重要棋子，限制对手的解围手段。',
+            content: '钉住和牵制能迫使对方被动防守。典型手段是在中心建立压力，利用象、后、车对敌方骑士或王翼形成钉住。'
+        },
+        {
+            title: '残局思想',
+            summary: '进入残局时，棋王活动性与兵推进最为关键。',
+            content: '残局阶段要争取棋王参与，同时注意兵的通路。多数残局中，王的活动范围决定胜负，保持通路和避免被锁死是取胜的关键。'
+        }
+    ];
+
+    let currentStrategyPage = 1;
+    const articlesPerPage = 3;
+
+    initLearningPanel();
+
     function initLearningPanel() {
         document.querySelectorAll('.learning-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -287,7 +324,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('replay-pause').addEventListener('click', pauseReplay);
         document.getElementById('replay-reset').addEventListener('click', resetReplay);
 
+        document.getElementById('strategy-prev').addEventListener('click', () => changeStrategyPage(-1));
+        document.getElementById('strategy-next').addEventListener('click', () => changeStrategyPage(1));
+
         renderReplayList();
+        renderStrategyPage();
     }
 
     function renderReplayList() {
@@ -308,6 +349,36 @@ document.addEventListener('DOMContentLoaded', function() {
             item.querySelector('button').addEventListener('click', () => loadReplayGame(index));
             list.appendChild(item);
         });
+    }
+
+    function renderStrategyPage() {
+        const list = document.getElementById('strategy-list');
+        const info = document.getElementById('strategy-page-info');
+        const start = (currentStrategyPage - 1) * articlesPerPage;
+        const end = start + articlesPerPage;
+        const pageArticles = strategyArticles.slice(start, end);
+
+        list.innerHTML = '';
+
+        pageArticles.forEach(article => {
+            const item = document.createElement('article');
+            item.className = 'strategy-item';
+            item.innerHTML = `
+                <h3>${article.title}</h3>
+                <p class="strategy-summary">${article.summary}</p>
+                <p>${article.content}</p>
+            `;
+            list.appendChild(item);
+        });
+
+        const totalPages = Math.ceil(strategyArticles.length / articlesPerPage);
+        info.textContent = `第 ${currentStrategyPage} / ${totalPages} 页`;
+    }
+
+    function changeStrategyPage(delta) {
+        const totalPages = Math.ceil(strategyArticles.length / articlesPerPage);
+        currentStrategyPage = Math.min(Math.max(1, currentStrategyPage + delta), totalPages);
+        renderStrategyPage();
     }
 
     function loadReplayGame(index) {
