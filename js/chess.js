@@ -819,6 +819,63 @@ class ChessEngine {
             return (this.currentPlayer === 'w' ? '白方' : '黑方') + '走棋';
         }
     }
+
+    // 导出棋盘状态为FEN格式
+    toFEN() {
+        let fen = '';
+
+        // 1. 棋盘位置
+        for (let row = 0; row < 8; row++) {
+            let emptyCount = 0;
+            for (let col = 0; col < 8; col++) {
+                const piece = this.getPiece(row, col);
+                if (piece) {
+                    if (emptyCount > 0) {
+                        fen += emptyCount;
+                        emptyCount = 0;
+                    }
+                    const pieceType = this.getPieceType(piece);
+                    const pieceColor = this.getPieceColor(piece);
+                    const fenPiece = pieceColor === 'w' ? pieceType : pieceType.toLowerCase();
+                    fen += fenPiece;
+                } else {
+                    emptyCount++;
+                }
+            }
+            if (emptyCount > 0) {
+                fen += emptyCount;
+            }
+            if (row < 7) {
+                fen += '/';
+            }
+        }
+
+        // 2. 当前玩家
+        fen += ' ' + this.currentPlayer;
+
+        // 3. 王车易位权利
+        let castling = '';
+        if (this.castlingRights.w.kingSide) castling += 'K';
+        if (this.castlingRights.w.queenSide) castling += 'Q';
+        if (this.castlingRights.b.kingSide) castling += 'k';
+        if (this.castlingRights.b.queenSide) castling += 'q';
+        fen += ' ' + (castling || '-');
+
+        // 4. 吃过路目标
+        if (this.enPassantTarget) {
+            const [row, col] = this.enPassantTarget;
+            const file = String.fromCharCode(97 + col); // a-h
+            const rank = 8 - row; // 1-8
+            fen += ' ' + file + rank;
+        } else {
+            fen += ' -';
+        }
+
+        // 5. 半回合计数和全回合数
+        fen += ' ' + this.halfMoveClock + ' ' + this.fullMoveNumber;
+
+        return fen;
+    }
 }
 
 // 导出类使其可以被其他模块使用

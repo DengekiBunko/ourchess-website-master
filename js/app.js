@@ -574,17 +574,16 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * 让AI走棋
      */
-    function makeAIMove() {
+    async function makeAIMove() {
         // 设置AI思考标志
         isAIThinking = true;
         
         // 更新状态文本
         document.getElementById('status').textContent = '黑方(AI)正在思考...';
         
-        // 使用setTimeout让UI有时间更新
-        setTimeout(() => {
-            // 获取AI的移动
-            const bestMove = ai.getBestMove(engine);
+        // 使用setTimeout让UI先刷新状态
+        setTimeout(async () => {
+            const bestMove = await ai.getBestMove(engine);
             
             if (bestMove) {
                 const [fromRow, fromCol, toRow, toCol] = bestMove;
@@ -602,8 +601,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (engine.gameOver) {
                     showGameOverDialog();
                 }
+            } else {
+                console.warn('AI未返回有效移动');
             }
-            
+
             // 重置AI思考标志
             isAIThinking = false;
         }, 100);

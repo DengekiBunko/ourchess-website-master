@@ -227,6 +227,14 @@ footer a:hover {
     color: var(--dark-color);
 }
 
+.learning-panel {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f4f1e6;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
 .learning-tabs {
     display: flex;
     justify-content: center;

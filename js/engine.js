@@ -1,123 +1,195 @@
 /**
  * 国际象棋AI引擎
- * 使用极小化极大算法与Alpha-Beta剪枝实现
+ * 使用Stockfish引擎替代极小化极大算法
  */
 class ChessAI {
     constructor(difficulty = 'medium') {
         this.setDifficulty(difficulty);
-        this.pieceValues = {
-            'P': 10,
-            'N': 30,
-            'B': 30,
-            'R': 50,
-            'Q': 90,
-            'K': 900
-        };
-        
-        // 棋子位置价值评估表
-        this.pawnEvalWhite = [
-            [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
-            [5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0],
-            [1.0,  1.0,  2.0,  3.0,  3.0,  2.0,  1.0,  1.0],
-            [0.5,  0.5,  1.0,  2.5,  2.5,  1.0,  0.5,  0.5],
-            [0.0,  0.0,  0.0,  2.0,  2.0,  0.0,  0.0,  0.0],
-            [0.5, -0.5, -1.0,  0.0,  0.0, -1.0, -0.5,  0.5],
-            [0.5,  1.0,  1.0, -2.0, -2.0,  1.0,  1.0,  0.5],
-            [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0]
-        ];
-        
-        this.knightEval = [
-            [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
-            [-4.0, -2.0,  0.0,  0.0,  0.0,  0.0, -2.0, -4.0],
-            [-3.0,  0.0,  1.0,  1.5,  1.5,  1.0,  0.0, -3.0],
-            [-3.0,  0.5,  1.5,  2.0,  2.0,  1.5,  0.5, -3.0],
-            [-3.0,  0.0,  1.5,  2.0,  2.0,  1.5,  0.0, -3.0],
-            [-3.0,  0.5,  1.0,  1.5,  1.5,  1.0,  0.5, -3.0],
-            [-4.0, -2.0,  0.0,  0.5,  0.5,  0.0, -2.0, -4.0],
-            [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
-        ];
-        
-        this.bishopEvalWhite = [
-            [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
-            [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
-            [-1.0,  0.0,  0.5,  1.0,  1.0,  0.5,  0.0, -1.0],
-            [-1.0,  0.5,  0.5,  1.0,  1.0,  0.5,  0.5, -1.0],
-            [-1.0,  0.0,  1.0,  1.0,  1.0,  1.0,  0.0, -1.0],
-            [-1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0, -1.0],
-            [-1.0,  0.5,  0.0,  0.0,  0.0,  0.0,  0.5, -1.0],
-            [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
-        ];
-        
-        this.rookEvalWhite = [
-            [0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0],
-            [0.5,  1.0,  1.0,  1.0,  1.0,  1.0,  1.0,  0.5],
-            [-0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-            [-0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-            [-0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-            [-0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-            [-0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -0.5],
-            [0.0,  0.0,  0.0,  0.5,  0.5,  0.0,  0.0,  0.0]
-        ];
-        
-        this.queenEval = [
-            [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
-            [-1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, -1.0],
-            [-1.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
-            [-0.5,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
-            [0.0,  0.0,  0.5,  0.5,  0.5,  0.5,  0.0, -0.5],
-            [-1.0,  0.5,  0.5,  0.5,  0.5,  0.5,  0.0, -1.0],
-            [-1.0,  0.0,  0.5,  0.0,  0.0,  0.0,  0.0, -1.0],
-            [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
-        ];
-        
-        this.kingEvalWhite = [
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
-            [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
-            [2.0,  2.0,  0.0,  0.0,  0.0,  0.0,  2.0,  2.0],
-            [2.0,  3.0,  1.0,  0.0,  0.0,  1.0,  3.0,  2.0]
-        ];
-        
-        // 游戏结束阶段，王要更积极
-        this.kingEndgameEvalWhite = [
-            [-5.0, -4.0, -3.0, -2.0, -2.0, -3.0, -4.0, -5.0],
-            [-3.0, -2.0, -1.0,  0.0,  0.0, -1.0, -2.0, -3.0],
-            [-3.0, -1.0,  2.0,  3.0,  3.0,  2.0, -1.0, -3.0],
-            [-3.0, -1.0,  3.0,  4.0,  4.0,  3.0, -1.0, -3.0],
-            [-3.0, -1.0,  3.0,  4.0,  4.0,  3.0, -1.0, -3.0],
-            [-3.0, -1.0,  2.0,  3.0,  3.0,  2.0, -1.0, -3.0],
-            [-3.0, -3.0,  0.0,  0.0,  0.0,  0.0, -3.0, -3.0],
-            [-5.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -5.0]
-        ];
+        this.stockfish = null;
+        this.isReady = false;
+        this.initStockfish();
     }
 
     // 设置AI难度
     setDifficulty(difficulty) {
         switch (difficulty) {
             case 'easy':
-                this.searchDepth = 2;
+                this.skillLevel = 0; // Stockfish skill level 0-20
                 break;
             case 'medium':
-                this.searchDepth = 3;
+                this.skillLevel = 10;
                 break;
             case 'hard':
-                this.searchDepth = 4;
+                this.skillLevel = 20;
                 break;
             default:
-                this.searchDepth = 3;
+                this.skillLevel = 10;
         }
     }
 
+    // 初始化Stockfish引擎
+    async initStockfish() {
+        try {
+            if (!window.Worker) {
+                throw new Error('浏览器不支持Web Worker');
+            }
+
+            this.stockfish = new Worker('js/stockfish.js');
+            this.isReady = false;
+            this.bestMoveResolver = null;
+            this.bestMoveTimeout = null;
+
+            this.stockfish.onmessage = (event) => {
+                const message = event.data;
+                console.log('Stockfish:', message);
+
+                if (message === 'readyok') {
+                    this.isReady = true;
+                    return;
+                }
+
+                if (message.startsWith('bestmove')) {
+                    const uciMove = this.parseBestMove(message);
+                    if (uciMove && uciMove !== 'none' && this.bestMoveResolver) {
+                        const move = this.uciToMove(uciMove);
+                        this.bestMoveResolver(move);
+                        this.bestMoveResolver = null;
+                        if (this.bestMoveTimeout) {
+                            clearTimeout(this.bestMoveTimeout);
+                            this.bestMoveTimeout = null;
+                        }
+                    }
+                }
+            };
+
+            this.sendUCICommand('uci');
+            this.sendUCICommand('isready');
+
+            // 等待Stockfish准备完成
+            await this.waitForReady();
+            this.sendUCICommand(`setoption name Skill Level value ${this.skillLevel}`);
+
+            console.log('Stockfish引擎初始化完成');
+        } catch (error) {
+            console.error('Stockfish初始化失败:', error);
+            this.isReady = false;
+        }
+    }
+
+    // 等待Stockfish就绪
+    waitForReady() {
+        return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                reject(new Error('Stockfish就绪超时')); 
+            }, 5000);
+
+            const checkReady = () => {
+                if (this.isReady) {
+                    clearTimeout(timeout);
+                    resolve();
+                } else {
+                    setTimeout(checkReady, 50);
+                }
+            };
+
+            checkReady();
+        });
+    }
+
+    // 发送UCI命令到Stockfish
+    sendUCICommand(command) {
+        if (!this.stockfish) {
+            console.warn('Stockfish未初始化');
+            return;
+        }
+
+        console.log('发送命令:', command);
+        this.stockfish.postMessage(command);
+    }
+
     // 获取AI建议的最佳移动
-    getBestMove(engine) {
+    async getBestMove(engine) {
+        if (!this.isReady) {
+            console.warn('Stockfish未准备好，使用备用算法');
+            return this.getBestMoveFallback(engine);
+        }
+
         const startTime = Date.now();
-        const bestMove = this.minimaxRoot(this.searchDepth, engine, true);
+
+        try {
+            const fen = engine.toFEN();
+            this.sendUCICommand('ucinewgame');
+            this.sendUCICommand(`position fen ${fen}`);
+            this.sendUCICommand(`setoption name Skill Level value ${this.skillLevel}`);
+
+            const timeLimit = this.getTimeLimit();
+            const bestMovePromise = this.waitForBestMove();
+            this.sendUCICommand(`go movetime ${timeLimit}`);
+
+            const bestMove = await bestMovePromise;
+            const endTime = Date.now();
+            console.log(`Stockfish思考时间: ${endTime - startTime}ms`);
+
+            return bestMove || this.getBestMoveFallback(engine);
+        } catch (error) {
+            console.error('Stockfish计算失败，使用备用算法:', error);
+            return this.getBestMoveFallback(engine);
+        }
+    }
+
+    // 获取思考时间限制（毫秒）
+    getTimeLimit() {
+        switch (this.skillLevel) {
+            case 0: return 500;
+            case 10: return 1000;
+            case 20: return 2000;
+            default: return 1000;
+        }
+    }
+
+    // 等待Stockfish返回bestmove
+    waitForBestMove() {
+        return new Promise((resolve) => {
+            this.bestMoveResolver = resolve;
+            if (this.bestMoveTimeout) {
+                clearTimeout(this.bestMoveTimeout);
+            }
+            this.bestMoveTimeout = setTimeout(() => {
+                if (this.bestMoveResolver) {
+                    this.bestMoveResolver(null);
+                    this.bestMoveResolver = null;
+                }
+            }, 5000);
+        });
+    }
+
+    // 解析Stockfish的bestmove输出
+    parseBestMove(output) {
+        const match = output.match(/bestmove\s+(\w+)/);
+        if (!match) return null;
+        const uciMove = match[1];
+        return uciMove === 'none' ? null : uciMove;
+    }
+
+    // 将UCI移动格式转换为[fromRow, fromCol, toRow, toCol]
+    uciToMove(uciMove) {
+        if (uciMove.length < 4) return null;
+
+        const fromFile = uciMove.charCodeAt(0) - 97;
+        const fromRank = 8 - parseInt(uciMove[1], 10);
+        const toFile = uciMove.charCodeAt(2) - 97;
+        const toRank = 8 - parseInt(uciMove[3], 10);
+
+        return [fromRank, fromFile, toRank, toFile];
+    }
+
+    // 备用算法（原来的minimax）
+    getBestMoveFallback(engine) {
+        const startTime = Date.now();
+        const bestMove = this.minimaxRoot(3, engine, true); // 使用固定深度3
         const endTime = Date.now();
-        
-        console.log(`AI思考时间: ${endTime - startTime}ms`);
+
+        console.log(`备用算法思考时间: ${endTime - startTime}ms`);
         return bestMove;
     }
 
