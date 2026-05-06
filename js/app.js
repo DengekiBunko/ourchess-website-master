@@ -231,8 +231,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('ai-mode').classList.toggle('active', gameMode === 'ai');
     }
 
-    // 回放状态
-    const replayGames = [
+    // 经典对局列表
+    const classicGames = [
         {
             title: '经典义大利开局',
             description: '展示快速发展骑士与象的开局思路。',
@@ -243,13 +243,22 @@ document.addEventListener('DOMContentLoaded', function() {
             notation: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd4', 'd5', 'O-O', 'Be7']
         },
         {
-            title: '中局控中心',
-            description: '通过中心兵和骑士构建主动布局。',
+            title: '西西里防御变例',
+            description: '一个具有典型战斗风格的现代防御实例。',
             moves: [
-                [6,4,4,4], [1,4,3,4], [6,3,4,3], [0,6,2,5], [7,5,4,2], [1,3,3,3],
-                [7,6,5,5], [0,1,2,2], [7,4,7,6], [0,2,2,4]
+                [6,4,4,4], [1,6,3,6], [7,6,5,5], [0,1,2,2], [6,3,4,3], [1,4,2,4],
+                [7,5,4,2], [0,6,2,5], [7,4,7,6], [0,3,3,3]
             ],
-            notation: ['e4', 'e5', 'd4', 'Nf6', 'Bc4', 'd5', 'Nf3', 'Nc6', 'O-O', 'Be7']
+            notation: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6']
+        },
+        {
+            title: '伦敦体系示范',
+            description: '稳健的战略布局，适合控制中心与后翼攻防。',
+            moves: [
+                [6,3,5,3], [1,4,3,4], [7,6,5,5], [0,6,2,5], [7,2,5,4], [0,1,2,2],
+                [7,5,3,3], [1,3,3,3], [7,4,7,6], [0,2,2,4]
+            ],
+            notation: ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'Bf5', 'e3', 'e6', 'Bd3', 'Bd6']
         },
         {
             title: '残局练习：车兵残局',
@@ -299,6 +308,26 @@ document.addEventListener('DOMContentLoaded', function() {
             title: '残局思想',
             summary: '进入残局时，棋王活动性与兵推进最为关键。',
             content: '残局阶段要争取棋王参与，同时注意兵的通路。多数残局中，王的活动范围决定胜负，保持通路和避免被锁死是取胜的关键。'
+        },
+        {
+            title: '兵力协调',
+            summary: '将轻重子协同配合比单兵强行更稳健。',
+            content: '避免孤立棋子，尽量让骑士、象和车形成联动。协调的兵力可以共同攻击弱点，也能更好地应对对手反击。'
+        },
+        {
+            title: '战术范式',
+            summary: '钉住、双击、牵制、发现攻击都是常见取胜方式。',
+            content: '学习并识别战术图式至关重要。常见主题包括钉住、双击、发现攻击、间接攻击和牵制，它们是快速获得优势的关键手段。'
+        },
+        {
+            title: '空间优势',
+            summary: '占据空间能让子力更容易进入敌方阵地。',
+            content: '空间优势意味着你有更多可移动区域，同时对手行动空间受限。通过稳步推进中心兵和侧翼兵线，你可以逐渐扩展活动范围。'
+        },
+        {
+            title: '交换原则',
+            summary: '当你更灵活时，尽量交换棋子；若被动则避免交换。',
+            content: '交换时要评估剩余兵形与活动性。通常在拥有更好结构、更强王翼活动时，主动换掉关键棋子会扩大优势。'
         }
     ];
 
@@ -327,26 +356,27 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('strategy-prev').addEventListener('click', () => changeStrategyPage(-1));
         document.getElementById('strategy-next').addEventListener('click', () => changeStrategyPage(1));
 
-        renderReplayList();
+        renderClassicGameList();
         renderStrategyPage();
     }
 
-    function renderReplayList() {
-        const list = document.getElementById('replay-list');
+    function renderClassicGameList() {
+        const list = document.getElementById('classic-list');
         list.innerHTML = '';
 
-        replayGames.forEach((game, index) => {
+        classicGames.forEach((game, index) => {
             const item = document.createElement('div');
             item.className = 'replay-item';
             item.innerHTML = `
                 <div>
                     <h4>${game.title}</h4>
                     <p>${game.description}</p>
+                    <p class="strategy-summary">开局示范 ${game.notation.length} 步</p>
                 </div>
-                <button type="button" data-index="${index}">加载对局</button>
+                <button type="button" data-index="${index}">选择对局</button>
             `;
 
-            item.querySelector('button').addEventListener('click', () => loadReplayGame(index));
+            item.querySelector('button').addEventListener('click', () => selectClassicGame(index));
             list.appendChild(item);
         });
     }
@@ -381,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderStrategyPage();
     }
 
-    function loadReplayGame(index) {
+    function selectClassicGame(index) {
         exitReplayMode();
 
         replayState.currentGameIndex = index;
@@ -392,7 +422,8 @@ document.addEventListener('DOMContentLoaded', function() {
         updateUI();
         updateReplayStatus();
 
-        document.getElementById('status').textContent = `回放模式：${replayGames[index].title}`;
+        document.getElementById('replay-selected-title').textContent = classicGames[index].title;
+        document.getElementById('status').textContent = `回放模式：${classicGames[index].title}`;
     }
 
     function updateReplayStatus() {
@@ -402,12 +433,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const game = replayGames[replayState.currentGameIndex];
+        const game = classicGames[replayState.currentGameIndex];
         status.textContent = `当前：${game.title} / 步数 ${replayState.currentStep} / ${game.moves.length}`;
     }
 
     function applyReplayStep(step) {
-        const game = replayGames[replayState.currentGameIndex];
+        const game = classicGames[replayState.currentGameIndex];
         if (!game) return;
 
         engine.reset();
@@ -429,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function stepReplay(direction) {
         if (!isReplayActive || replayState.currentGameIndex === null) return;
 
-        const game = replayGames[replayState.currentGameIndex];
+        const game = classicGames[replayState.currentGameIndex];
         const nextStep = replayState.currentStep + direction;
         if (nextStep < 0 || nextStep > game.moves.length) return;
 
@@ -443,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (replayState.intervalId) return;
 
         replayState.intervalId = setInterval(() => {
-            const game = replayGames[replayState.currentGameIndex];
+            const game = classicGames[replayState.currentGameIndex];
             if (replayState.currentStep >= game.moves.length) {
                 pauseReplay();
                 return;
@@ -473,6 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
         replayState.currentGameIndex = null;
         replayState.currentStep = 0;
         document.getElementById('replay-status').textContent = '请选择一局对局开始回放。';
+        document.getElementById('replay-selected-title').textContent = '未选择对局';
         updateModeButtons();
     }
 

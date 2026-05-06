@@ -301,6 +301,15 @@ footer a:hover {
     margin-bottom: 10px;
 }
 
+.replay-current {
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    background-color: #ffffff;
+    border: 1px solid rgba(52, 78, 65, 0.12);
+    border-radius: 10px;
+    color: var(--dark-color);
+}
+
 .strategy-pagination {
     display: flex;
     justify-content: center;

@@ -54,6 +54,7 @@
                 <div class="learning-tabs">
                     <button class="learning-tab active" data-panel="tutorial-panel">教程</button>
                     <button class="learning-tab" data-panel="strategy-panel">策略文章</button>
+                    <button class="learning-tab" data-panel="classic-panel">经典对局</button>
                     <button class="learning-tab" data-panel="replay-panel">对局回放</button>
                 </div>
 
@@ -89,10 +90,18 @@
                         </div>
                     </div>
 
+                    <div id="classic-panel" class="panel">
+                        <h2>经典对局库</h2>
+                        <p>这里列出经典开局和实战片段，选择后可进入回放观看每一步变化。</p>
+                        <div id="classic-list" class="replay-list"></div>
+                    </div>
+
                     <div id="replay-panel" class="panel">
                         <h2>对局回放</h2>
-                        <p>选择一局经典对局，自动加载并逐步回放棋步。你也可以手动控制回放进度。</p>
-                        <div id="replay-list" class="replay-list"></div>
+                        <p>已选择对局后，可使用下面的控制按钮逐步回放或自动播放棋步。</p>
+                        <div id="replay-current" class="replay-current">
+                            <strong>当前对局：</strong><span id="replay-selected-title">未选择对局</span>
+                        </div>
                         <div class="replay-controls">
                             <button id="replay-prev">上一步</button>
                             <button id="replay-play">播放</button>
@@ -100,7 +109,7 @@
                             <button id="replay-next">下一步</button>
                             <button id="replay-reset">重置</button>
                         </div>
-                        <div id="replay-status" class="replay-status">请选择一局对局开始回放。</div>
+                        <div id="replay-status" class="replay-status">请选择一局经典对局开始回放。</div>
                     </div>
                 </div>
             </section>
