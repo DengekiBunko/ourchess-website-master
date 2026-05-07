@@ -159,7 +159,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('language-select').addEventListener('change', function() {
         setLanguage(this.value);
     });
-    
+
+    // 初始化时翻译UI
+    translateUI();
+
     // 设置升变模态框事件
     setupPromotionModal();
     
