@@ -2,6 +2,18 @@
  * 国际象棋应用程序
  * 集成引擎、棋盘UI和AI
  */
+<<<<<<< HEAD
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化游戏引擎
+    const engine = new ChessEngine();
+    
+    // 初始化AI
+    const ai = new ChessAI('medium');
+
+    // 当前语言
+    let currentLanguage = 'en';
+=======
+>>>>>>> 629fa101c6479fa055a3386d3cf04b802146721d
 
 // 全局翻译对象和语言设置 - 在DOMContentLoaded之外定义，所有页面都能访问
 let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
@@ -69,44 +81,48 @@ const translations = {
         navContact: { zh: '联系我们', en: 'Contact Us' },
         aboutTitle: { zh: '关于我们', en: 'About Us' },
         aboutWelcome: { zh: '欢迎来到我们的国际象棋网站', en: 'Welcome to Our Chess Website' },
-        aboutIntro: { zh: '我们的国际象棋网站致力于为所有水平的国际象棋爱好者提供引人入胜且富有教育意义的平台。无论您是初学者学习基础知识，还是经验丰富的玩家磨练技能，我们都提供工具和资源来增强您的国际象棋之旅。', en: 'Our chess website is dedicated to providing an engaging and educational platform for chess enthusiasts of all levels. Whether you\'re a beginner learning the basics or an experienced player honing your skills, we offer tools and resources to enhance your chess journey.' },
+        aboutDesc: { zh: '我们的国际象棋网站致力于为各级别的国际象棋爱好者提供一个有趣且富有教育意义的平台。无论您是学习基础知识的初学者，还是磨练技艺的经验丰富的棋手，我们都提供工具和资源来增强您的国际象棋之旅。', en: 'Our chess website is dedicated to providing an engaging and educational platform for chess enthusiasts of all levels. Whether you\'re a beginner learning the basics or an experienced player honing your skills, we offer tools and resources to enhance your chess journey.' },
         aboutMission: { zh: '我们的使命', en: 'Our Mission' },
-        aboutMissionText: { zh: '让国际象棋对每个人都易于访问、有趣且富有教育意义。我们相信国际象棋不仅仅是一种游戏，更是一种培养批判性思维、策略和耐心的方式。', en: 'To make chess accessible, fun, and educational for everyone. We believe that chess is not just a game, but a way to develop critical thinking, strategy, and patience.' },
+        aboutMissionText: { zh: '让每个人都能接触、有趣且教育性地学习国际象棋。我们相信国际象棋不仅仅是一种游戏，更是一种培养批判性思维、策略和耐心的方式。', en: 'To make chess accessible, fun, and educational for everyone. We believe that chess is not just a game, but a way to develop critical thinking, strategy, and patience.' },
         aboutFeatures: { zh: '功能特色', en: 'Features' },
-        aboutLocalMode: { zh: '本地双人对战：在同一设备上与朋友对战。', en: 'Local Two-Player Mode: Play against a friend on the same device.' },
-        aboutAIMode: { zh: 'AI对手：挑战可调节难度级别的AI。', en: 'AI Opponent: Challenge yourself against an AI with adjustable difficulty levels.' },
-        aboutTutorials: { zh: '互动教程：学习规则、棋子移动和基本策略。', en: 'Interactive Tutorials: Learn the rules, piece movements, and basic strategies.' },
-        aboutStrategy: { zh: '策略文章：阅读关于国际象棋战术和开局的深入文章。', en: 'Strategy Articles: Read in-depth articles on chess tactics and openings.' },
-        aboutClassic: { zh: '经典对局回放：学习大师们的著名对局。', en: 'Classic Games Replay: Study famous games and learn from masters.' },
+        aboutFeature1: { zh: '本地双人对战模式：在同一设备上与朋友对战。', en: 'Local Two-Player Mode: Play against a friend on the same device.' },
+        aboutFeature2: { zh: 'AI对手：挑战可调节难度级别的AI。', en: 'AI Opponent: Challenge yourself against an AI with adjustable difficulty levels.' },
+        aboutFeature3: { zh: '互动教程：学习规则、棋子移动和基本策略。', en: 'Interactive Tutorials: Learn the rules, piece movements, and basic strategies.' },
+        aboutFeature4: { zh: '策略文章：阅读关于国际象棋战术和开局的深度文章。', en: 'Strategy Articles: Read in-depth articles on chess tactics and openings.' },
+        aboutFeature5: { zh: '经典对局回放：研究著名对局并向大师学习。', en: 'Classic Games Replay: Study famous games and learn from masters.' },
         aboutTeam: { zh: '我们的团队', en: 'Our Team' },
-        aboutTeamText: { zh: '我们是一支充满热情的国际象棋爱好者和开发者团队，致力于在线创建最佳的国际象棋体验。我们的项目是开源的，可在GitHub上获取。', en: 'We are a passionate team of chess lovers and developers committed to creating the best chess experience online. Our project is open-source and available on GitHub.' },
+        aboutTeamText: { zh: '我们是一支由国际象棋爱好者和开发者组成的热情团队，致力于创造最佳的在线国际象棋体验。我们的项目是开源的，可在GitHub上获取。', en: 'We are a passionate team of chess lovers and developers committed to creating the best chess experience online. Our project is open-source and available on GitHub.' },
         privacyTitle: { zh: '隐私政策', en: 'Privacy Policy' },
-        privacyEffective: { zh: '生效日期：2026年5月8日', en: 'Effective Date: May 8, 2026' },
-        privacyDesc: { zh: '本隐私政策描述了您使用我们的国际象棋网站时，我们如何收集、使用和保护您的信息。', en: 'This Privacy Policy describes how we collect, use, and protect your information when you use our chess website.' },
+        privacyEffective: { zh: '生效日期：', en: 'Effective Date: ' },
+        privacyDesc: { zh: '本隐私政策描述了我们如何收集、使用和保护您在使用我们的国际象棋网站时的信息。', en: 'This Privacy Policy describes how we collect, use, and protect your information when you use our chess website.' },
         privacyCollect: { zh: '我们收集的信息', en: 'Information We Collect' },
-        privacyCollectText: { zh: '为了改进我们的服务并提供个性化体验，我们通过第三方广告合作伙伴（如Google AdSense）收集某些信息。这包括通过Cookie和类似跟踪技术收集的信息。', en: 'To improve our services and provide personalized experiences, we collect certain information through third-party advertising partners such as Google AdSense. This includes information collected through cookies and similar tracking technologies.' },
+        privacyCollectText: { zh: '我们的网站设计为在您的浏览器中本地运行，不收集或存储任何个人信息。所有游戏数据、设置和交互都保留在您的设备上。', en: 'Our website is designed to run locally in your browser and does not collect or store any personal information. All game data, settings, and interactions remain on your device.' },
         privacyUse: { zh: '我们如何使用信息', en: 'How We Use Information' },
-        privacyUseText: { zh: '收集的信息用于：显示相关广告、分析网站使用情况、改进用户体验。广告合作伙伴可能会根据您的浏览行为展示定向广告。', en: 'Collected information is used for: displaying relevant advertisements, analyzing site usage, and improving user experience. Our advertising partners may display targeted ads based on your browsing behavior.' },
-        privacyCookie: { zh: 'Cookie和跟踪技术', en: 'Cookies and Tracking Technologies' },
-        privacyCookieText: { zh: '我们和第三方广告商使用Cookie来跟踪您的活动并为您提供个性化内容。您可以通过浏览器设置控制Cookie。某些Cookie可能是必需的以维持网站功能。', en: 'We and third-party advertisers use cookies to track your activity and provide personalized content. You can control cookies through your browser settings. Some cookies may be necessary to maintain website functionality.' },
+        privacyUseText: { zh: '由于我们不收集任何数据，因此不使用个人信息。网站完全在客户端运行。', en: 'Since we do not collect any data, there is no usage of personal information. The website functions entirely client-side.' },
         privacySecurity: { zh: '数据安全', en: 'Data Security' },
-        privacySecurityText: { zh: '我们致力于保护您的数据安全。然而，通过互联网传输的数据无法完全保证安全。', en: 'We are committed to protecting your data security. However, data transmitted over the internet cannot be guaranteed to be completely secure.' },
+        privacySecurityText: { zh: '由于没有任何数据传输或存储在我们的服务器上，您的隐私得到完全保护。请确保您的本地环境安全。', en: 'As no data is transmitted or stored on our servers, your privacy is fully protected. Please ensure your local environment is secure.' },
         privacyThirdParty: { zh: '第三方服务', en: 'Third-Party Services' },
-        privacyThirdPartyText: { zh: '我们使用第三方广告合作伙伴（如Google AdSense）。这些合作伙伴可能会收集和使用您的信息进行广告投放。详细信息请参考其隐私政策。', en: 'We use third-party advertising partners such as Google AdSense. These partners may collect and use your information for advertising purposes. Please refer to their privacy policies for details.' },
-        privacyYourRights: { zh: '您的权利', en: 'Your Rights' },
-        privacyYourRightsText: { zh: '您有权访问、修改或删除我们持有的关于您的信息。您也可以选择退出个性化广告投放。', en: 'You have the right to access, modify, or delete information we hold about you. You can also opt out of personalized advertising.' },
-        privacyChanges: { zh: '政策变更', en: 'Changes to This Policy' },
-        privacyChangesText: { zh: '我们可能会不时更新本隐私政策。任何变更将在此页面上反映。', en: 'We may update this Privacy Policy from time to time. Any changes will be reflected on this page.' },
+        privacyThirdPartyText: { zh: '本网站不与任何收集数据的第三方服务集成。', en: 'This website does not integrate with any third-party services that collect data.' },
+        privacyChanges: { zh: '本政策的变更', en: 'Changes to This Policy' },
+        privacyChangesText: { zh: '我们可能会不时更新本隐私政策。任何变更都将反映在本页面上。', en: 'We may update this Privacy Policy from time to time. Any changes will be reflected on this page.' },
         privacyContact: { zh: '联系我们', en: 'Contact Us' },
         privacyContactText: { zh: '如果您对本隐私政策有任何疑问，请通过 main@setup.de5.net 联系我们。', en: 'If you have any questions about this Privacy Policy, please contact us at main@setup.de5.net.' },
         contactTitle: { zh: '联系我们', en: 'Contact Us' },
-        contactIntro: { zh: '我们很乐意听到您的声音！无论您对我们的国际象棋网站有疑问、反馈还是建议，请随时联系我们。', en: 'We\'d love to hear from you! Whether you have questions, feedback, or suggestions about our chess website, feel free to reach out.' },
+        contactGetInTouch: { zh: '保持联系', en: 'Get in Touch' },
+        contactDesc: { zh: '我们很乐意听取您的意见！无论您对我们的国际象棋网站有疑问、反馈或建议，请随时与我们联系。', en: 'We\'d love to hear from you! Whether you have questions, feedback, or suggestions about our chess website, feel free to reach out.' },
         contactInfo: { zh: '联系信息', en: 'Contact Information' },
-        contactEmail: { zh: '邮箱：', en: 'Email:' },
+        contactEmail: { zh: '邮箱：', en: 'Email: ' },
         contactHow: { zh: '如何联系我们', en: 'How to Reach Us' },
+<<<<<<< HEAD
+        contactHowText: { zh: '您可以向我们发送电子邮件询问，我们会尽快回复。请包含明确的主题行和详细的消息。', en: 'You can send us an email with your inquiries, and we\'ll get back to you as soon as possible. Please include a clear subject line and detailed message.' },
+        contactSupport: { zh: '技术支持', en: 'Support' },
+        contactSupportText: { zh: '对于技术问题或功能请求，请尽可能提供详细信息，包括您的浏览器版本和重现问题的步骤。', en: 'For technical issues or feature requests, please provide as much detail as possible, including your browser version and steps to reproduce any problems.' },
+        footerCopyright: { zh: '版权所有', en: 'All Rights Reserved' }
+=======
         contactHowText: { zh: '您可以通过电子邮件发送您的询问，我们会尽快回复。请包含清晰的主题行和详细消息。', en: 'You can send us an email with your inquiries, and we\'ll get back to you as soon as possible. Please include a clear subject line and detailed message.' },
         contactSupport: { zh: '支持', en: 'Support' },
         contactSupportText: { zh: '对于技术问题或功能请求，请提供尽可能多的细节，包括您的浏览器版本和重现问题的步骤。', en: 'For technical issues or feature requests, please provide as much detail as possible, including your browser version and steps to reproduce any problems.' }
+>>>>>>> 629fa101c6479fa055a3386d3cf04b802146721d
     };
 
 function translateText(key) {
@@ -121,6 +137,16 @@ function formatText(key, ...args) {
     return text;
 }
 
+<<<<<<< HEAD
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        translateUI();
+        renderClassicGameList();
+        renderStrategyPage();
+        updateUI();
+    }
+=======
 function setLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('selectedLanguage', lang);
@@ -130,6 +156,7 @@ function setLanguage(lang) {
     if (typeof renderStrategyPage === 'function') renderStrategyPage();
     if (typeof updateUI === 'function') updateUI();
 }
+>>>>>>> 629fa101c6479fa055a3386d3cf04b802146721d
 
 function translateUI() {
     document.title = translateText('title');
@@ -146,6 +173,43 @@ function translateUI() {
         strategyPageInfo.textContent = formatText('pageInfo', currentStrategyPage, totalPages);
     }
 
+<<<<<<< HEAD
+    // 初始化棋盘UI
+    const boardElement = document.getElementById('chessboard');
+    const chessboard = new ChessboardUI(boardElement, {
+        draggable: true,
+        showLegalMoves: true,
+        onPieceClick: handlePieceClick,
+        onSquareClick: handleSquareClick,
+        onMove: handleMove
+    });
+    
+    // 游戏状态
+    let gameMode = 'two-player'; // 'two-player' 或 'ai'
+    let selectedPiece = null;
+    let legalMoves = [];
+    let isAIThinking = false;
+    
+    // 更新棋盘
+    updateUI();
+    
+    // 设置事件监听器
+    document.getElementById('two-player-mode').addEventListener('click', setTwoPlayerMode);
+    document.getElementById('ai-mode').addEventListener('click', setAIMode);
+    document.getElementById('new-game').addEventListener('click', newGame);
+    document.getElementById('undo-move').addEventListener('click', undoMove);
+    document.getElementById('play-again').addEventListener('click', newGame);
+    
+    // AI难度选择
+    document.getElementById('ai-difficulty').addEventListener('change', function() {
+        ai.setDifficulty(this.value);
+    });
+
+    // 语言切换
+    document.getElementById('language-select').addEventListener('change', function() {
+        setLanguage(this.value);
+    });
+=======
     const selectedTitle = document.getElementById('replay-selected-title');
     if (replayState.currentGameIndex !== null) {
         const selectedGame = classicGames[replayState.currentGameIndex];
@@ -170,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setLanguage(this.value);
         });
     }
+>>>>>>> 629fa101c6479fa055a3386d3cf04b802146721d
     
     // 非主页直接返回
     if (!document.getElementById('chessboard')) {
@@ -1132,4 +1197,3 @@ function getChessPieceSVG(color, type) {
 
 // 执行加载棋子图像的函数
 // loadChessPieceImages();
-}); // 关闭DOMContentLoaded
