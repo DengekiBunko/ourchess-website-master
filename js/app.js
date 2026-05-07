@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('selectedLanguage', lang);
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         translateUI();
-        // 仅在主页调用这些函数
+        // 这些函数仅在主页存在
         if (typeof renderClassicGameList === 'function') renderClassicGameList();
         if (typeof renderStrategyPage === 'function') renderStrategyPage();
         if (typeof updateUI === 'function') updateUI();
@@ -161,21 +161,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // 立即翻译页面 - 在页面加载时应用已保存的语言
     translateUI();
     
-    // 设置语言选择器事件监听（仅在主页有该元素）
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.value = currentLanguage;
-        languageSelect.addEventListener('change', function() {
-            setLanguage(this.value);
-        });
+    // 仅在主页运行游戏初始化（主页有棋盘元素）
+    if (!document.getElementById('chessboard')) {
+        return; // 非主页，只进行翻译
     }
-
-    // 初始化棋盘UI - 仅在主页执行
-    if (!document.body.classList.contains('game-page')) return;
     
+    // 初始化游戏引擎
     const engine = new ChessEngine();
+    
+    // 初始化AI
     const ai = new ChessAI('medium');
 
+    // 初始化棋盘UI
     const boardElement = document.getElementById('chessboard');
     const chessboard = new ChessboardUI(boardElement, {
         draggable: true,
@@ -207,9 +204,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 语言切换
-    document.getElementById('language-select').addEventListener('change', function() {
-        setLanguage(this.value);
-    });
+    const languageSelect = document.getElementById('language-select');
+    if (languageSelect) {
+        languageSelect.value = currentLanguage;
+        languageSelect.addEventListener('change', function() {
+            setLanguage(this.value);
+        });
+    }
     
     // 设置升变模态框事件
     setupPromotionModal();
@@ -1155,5 +1156,4 @@ function getChessPieceSVG(color, type) {
 
 // 执行加载棋子图像的函数
 // loadChessPieceImages();
-    } // 关闭游戏页面条件
 }); // 关闭DOMContentLoaded
