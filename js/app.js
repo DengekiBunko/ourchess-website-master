@@ -68,7 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
         pageInfo: { zh: '第 {0} / {1} 页', en: 'Page {0} / {1}' },
         replayStatusCurrent: { zh: '当前：{0} / 步数 {1} / {2}', en: 'Current: {0} / move {1} / {2}' },
         replayMode: { zh: '回放模式：{0}', en: 'Replay mode: {0}' },
-        strategySummary: { zh: '开局示范 {0} 步', en: 'Opening demonstration {0} moves' }
+        strategySummary: { zh: '开局示范 {0} 步', en: 'Opening demonstration {0} moves' },
+        navHome: { zh: '首页', en: 'Home' },
+        navAbout: { zh: '关于我们', en: 'About Us' },
+        navPrivacy: { zh: '隐私政策', en: 'Privacy Policy' },
+        navContact: { zh: '联系我们', en: 'Contact Us' },
+        footerCopyright: { zh: '版权所有', en: 'All Rights Reserved' }
     };
 
     function translateText(key) {
