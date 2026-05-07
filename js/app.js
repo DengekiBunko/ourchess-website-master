@@ -72,8 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         navHome: { zh: '首页', en: 'Home' },
         navAbout: { zh: '关于我们', en: 'About Us' },
         navPrivacy: { zh: '隐私政策', en: 'Privacy Policy' },
-        navContact: { zh: '联系我们', en: 'Contact Us' },
-        footerCopyright: { zh: '版权所有', en: 'All Rights Reserved' }
+        navContact: { zh: '联系我们', en: 'Contact Us' }
     };
 
     function translateText(key) {

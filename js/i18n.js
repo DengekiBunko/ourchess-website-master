@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         privacyCookies: { zh: 'Cookie和广告', en: 'Cookies and Advertising' },
         privacyCookiesText: { zh: '我们使用第三方广告服务（如Google AdSense）在网站上展示广告。这些广告服务可能会使用Cookie和网络信标来收集有关您访问本网站及其他网站的信息，以便提供与您兴趣相关的广告。收集的信息可能包括您的IP地址、浏览器类型、访问时间以及您在本网站和其他网站上查看的内容。', en: 'We use third-party advertising services (such as Google AdSense) to display ads on our website. These advertising services may use cookies and web beacons to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. The information collected may include your IP address, browser type, time of visit, and content you view on this and other websites.' },
         privacyCookiesManage: { zh: '管理Cookie偏好', en: 'Managing Cookie Preferences' },
-        privacyCookiesManageText: { zh: '您可以通过浏览器设置管理Cookie偏好，包括禁用Cookie或删除已存储的Cookie。请注意，禁用Cookie可能会影响网站的部分功能。此外，您可以通过访问Google的广告设置页面（https://adssettings.google.com）来选择退出个性化广告。', en: 'You can manage your cookie preferences through your browser settings, including disabling cookies or deleting stored cookies. Please note that disabling cookies may affect some features of the website. Additionally, you can opt out of personalized advertising by visiting Google\'s Ads Settings page (https://adssettings.google.com).' },
+        privacyCookiesManageText: { zh: '您可以通过浏览器设置管理Cookie偏好，包括禁用Cookie或删除已存储的Cookie。请注意，禁用Cookie可能会影响网站的部分功能。', en: 'You can manage your cookie preferences through your browser settings, including disabling cookies or deleting stored cookies. Please note that disabling cookies may affect some features of the website.' },
         privacyUse: { zh: '我们如何使用信息', en: 'How We Use Information' },
         privacyUseText: { zh: '我们不直接收集或存储个人身份信息。第三方广告服务收集的信息仅用于提供和优化广告展示。游戏相关数据完全保留在您的本地设备上。', en: 'We do not directly collect or store personally identifiable information. Information collected by third-party advertising services is used solely for delivering and optimizing ad display. Game-related data remains entirely on your local device.' },
         privacySecurity: { zh: '数据安全', en: 'Data Security' },
@@ -50,8 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         contactHow: { zh: '如何联系我们', en: 'How to Reach Us' },
         contactHowText: { zh: '您可以向我们发送电子邮件询问，我们会尽快回复。请包含明确的主题行和详细的消息。', en: 'You can send us an email with your inquiries, and we will get back to you as soon as possible. Please include a clear subject line and detailed message.' },
         contactSupport: { zh: '技术支持', en: 'Support' },
-        contactSupportText: { zh: '对于技术问题或功能请求，请尽可能提供详细信息，包括您的浏览器版本和重现问题的步骤。', en: 'For technical issues or feature requests, please provide as much detail as possible, including your browser version and steps to reproduce any problems.' },
-        footerCopyright: { zh: '版权所有', en: 'All Rights Reserved' }
+        contactSupportText: { zh: '对于技术问题或功能请求，请尽可能提供详细信息，包括您的浏览器版本和重现问题的步骤。', en: 'For technical issues or feature requests, please provide as much detail as possible, including your browser version and steps to reproduce any problems.' }
     };
 
     function translateText(key) {
