@@ -2,11 +2,11 @@
  * 国际象棋应用程序
  * 集成引擎、棋盘UI和AI
  */
-document.addEventListener('DOMContentLoaded', function() {
-    // 当前语言 - 从localStorage读取，默认为'en'
-    let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
 
-    const translations = {
+// 全局翻译对象和语言设置 - 在DOMContentLoaded之外定义，所有页面都能访问
+let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+const translations = {
         title: { zh: '国际象棋 - 双人对战与人机对战', en: 'Chess - Local and AI Play' },
         headerTitle: { zh: '国际象棋', en: 'Chess' },
         languageLabel: { zh: '语言：', en: 'Language:' },
@@ -107,103 +107,62 @@ document.addEventListener('DOMContentLoaded', function() {
         contactHowText: { zh: '您可以通过电子邮件发送您的询问，我们会尽快回复。请包含清晰的主题行和详细消息。', en: 'You can send us an email with your inquiries, and we\'ll get back to you as soon as possible. Please include a clear subject line and detailed message.' },
         contactSupport: { zh: '支持', en: 'Support' },
         contactSupportText: { zh: '对于技术问题或功能请求，请提供尽可能多的细节，包括您的浏览器版本和重现问题的步骤。', en: 'For technical issues or feature requests, please provide as much detail as possible, including your browser version and steps to reproduce any problems.' }
+    };
 
-    function translateText(key) {
-        return (translations[key] && translations[key][currentLanguage]) || '';
-    }
+function translateText(key) {
+    return (translations[key] && translations[key][currentLanguage]) || '';
+}
 
-    function formatText(key, ...args) {
-        let text = translateText(key);
-        args.forEach((value, index) => {
-            text = text.replace(`{${index}}`, value);
-        });
-        return text;
-    }
+function formatText(key, ...args) {
+    let text = translateText(key);
+    args.forEach((value, index) => {
+        text = text.replace(`{${index}}`, value);
+    });
+    return text;
+}
 
-    function setLanguage(lang) {
-        currentLanguage = lang;
-        localStorage.setItem('selectedLanguage', lang);
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-        translateUI();
-        // 这些函数仅在主页存在
-        if (typeof renderClassicGameList === 'function') renderClassicGameList();
-        if (typeof renderStrategyPage === 'function') renderStrategyPage();
-        if (typeof updateUI === 'function') updateUI();
-    }
+function setLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('selectedLanguage', lang);
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    translateUI();
+    if (typeof renderClassicGameList === 'function') renderClassicGameList();
+    if (typeof renderStrategyPage === 'function') renderStrategyPage();
+    if (typeof updateUI === 'function') updateUI();
+}
 
-    function translateUI() {
-        document.title = translateText('title');
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            const text = translateText(key);
-            if (text) {
-                el.textContent = text;
-            }
-        });
-        const strategyPageInfo = document.getElementById('strategy-page-info');
-        if (strategyPageInfo) {
-            const totalPages = Math.max(1, Math.ceil(strategyArticles.length / articlesPerPage));
-            strategyPageInfo.textContent = formatText('pageInfo', currentStrategyPage, totalPages);
+function translateUI() {
+    document.title = translateText('title');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const text = translateText(key);
+        if (text) {
+            el.textContent = text;
         }
-
-        const selectedTitle = document.getElementById('replay-selected-title');
-        if (replayState.currentGameIndex !== null) {
-            const selectedGame = classicGames[replayState.currentGameIndex];
-            if (selectedGame) {
-                selectedTitle.textContent = selectedGame.title[currentLanguage] || selectedGame.title.zh;
-                updateReplayStatus();
-            }
-        } else if (selectedTitle) {
-            selectedTitle.textContent = translateText('noGameSelected');
-        }
+    });
+    const strategyPageInfo = document.getElementById('strategy-page-info');
+    if (strategyPageInfo) {
+        const totalPages = Math.max(1, Math.ceil(strategyArticles.length / articlesPerPage));
+        strategyPageInfo.textContent = formatText('pageInfo', currentStrategyPage, totalPages);
     }
 
-    // 立即翻译页面 - 在页面加载时应用已保存的语言
+    const selectedTitle = document.getElementById('replay-selected-title');
+    if (replayState.currentGameIndex !== null) {
+        const selectedGame = classicGames[replayState.currentGameIndex];
+        if (selectedGame) {
+            selectedTitle.textContent = selectedGame.title[currentLanguage] || selectedGame.title.zh;
+            updateReplayStatus();
+        }
+    } else if (selectedTitle) {
+        selectedTitle.textContent = translateText('noGameSelected');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 立即翻译页面
     translateUI();
     
-    // 仅在主页运行游戏初始化（主页有棋盘元素）
-    if (!document.getElementById('chessboard')) {
-        return; // 非主页，只进行翻译
-    }
-    
-    // 初始化游戏引擎
-    const engine = new ChessEngine();
-    
-    // 初始化AI
-    const ai = new ChessAI('medium');
-
-    // 初始化棋盘UI
-    const boardElement = document.getElementById('chessboard');
-    const chessboard = new ChessboardUI(boardElement, {
-        draggable: true,
-        showLegalMoves: true,
-        onPieceClick: handlePieceClick,
-        onSquareClick: handleSquareClick,
-        onMove: handleMove
-    });
-    
-    // 游戏状态
-    let gameMode = 'two-player'; // 'two-player' 或 'ai'
-    let selectedPiece = null;
-    let legalMoves = [];
-    let isAIThinking = false;
-    
-    // 更新棋盘
-    updateUI();
-    
-    // 设置事件监听器
-    document.getElementById('two-player-mode').addEventListener('click', setTwoPlayerMode);
-    document.getElementById('ai-mode').addEventListener('click', setAIMode);
-    document.getElementById('new-game').addEventListener('click', newGame);
-    document.getElementById('undo-move').addEventListener('click', undoMove);
-    document.getElementById('play-again').addEventListener('click', newGame);
-    
-    // AI难度选择
-    document.getElementById('ai-difficulty').addEventListener('change', function() {
-        ai.setDifficulty(this.value);
-    });
-
-    // 语言切换
+    // 设置语言选择器
     const languageSelect = document.getElementById('language-select');
     if (languageSelect) {
         languageSelect.value = currentLanguage;
@@ -212,8 +171,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 设置升变模态框事件
-    setupPromotionModal();
+    // 非主页直接返回
+    if (!document.getElementById('chessboard')) {
+        return;
+    }
+    
+    // 以下仅在主页执行
+    const engine = new ChessEngine();
+    const ai = new ChessAI('medium');
+    
+    // 初始化棋盘UI
+    const chessboard = new ChessboardUI(document.getElementById('chessboard'), {
+        draggable: true,
+        showLabels: true,
+        showLegalMoves: true,
+        orientation: 'white',
+        onPieceClick: handlePieceClick,
+        onSquareClick: handleSquareClick,
+        onMove: handleMove
+    });
     
     /**
      * 处理棋子点击事件
