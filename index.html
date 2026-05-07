@@ -7,16 +7,10 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/chessboard.css">
 </head>
-<body>
+<body class="game-page">
     <div class="container">
         <header>
             <h1 data-i18n="headerTitle">国际象棋</h1>
-            <nav>
-                <a href="index.html" data-i18n="navHome">首页</a>
-                <a href="about.html" data-i18n="navAbout">关于我们</a>
-                <a href="privacy.html" data-i18n="navPrivacy">隐私政策</a>
-                <a href="contact.html" data-i18n="navContact">联系我们</a>
-            </nav>
             <div class="mode-selection">
                 <button id="two-player-mode" class="active" data-i18n="twoPlayerMode">双人对战</button>
                 <button id="ai-mode" data-i18n="aiMode">人机对战</button>
@@ -39,6 +33,10 @@
         </header>
 
         <main>
+            <div class="ad-banner">
+                <!-- Ad placeholder -->
+                <div class="ad-placeholder">广告位</div>
+            </div>
             <div class="game-container">
                 <div class="board-container">
                     <div id="chessboard"></div>
@@ -150,7 +148,12 @@
         </div>
 
         <footer>
-            <p><span data-i18n="footerPrefix">国际象棋游戏</span> &copy; 2023 | <a href="https://github.com/DengekiBunko/ourchess-website-master" target="_blank" data-i18n="footerLink">GitHub</a></p>
+            <nav>
+                <a href="index.html" data-i18n="navHome">首页</a>
+                <a href="about.html" data-i18n="navAbout">关于我们</a>
+                <a href="privacy.html" data-i18n="navPrivacy">隐私政策</a>
+                <a href="contact.html" data-i18n="navContact">联系我们</a>
+            </nav>
         </footer>
     </div>
 
