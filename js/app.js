@@ -3,29 +3,8 @@
  * 集成引擎、棋盘UI和AI
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // 当前语言
-    let currentLanguage = 'en';
-
-    // 语言选择事件
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.addEventListener('change', function() {
-            setLanguage(this.value);
-        });
-        // 初始化语言
-        setLanguage(languageSelect.value);
-    } else {
-        // 如果没有语言选择器，仍然设置默认语言
-        setLanguage('en');
-    }
-
-    // 只在主页运行游戏代码
-    if (document.body.classList.contains('game-page') || window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
-        // 初始化游戏引擎
-        const engine = new ChessEngine();
-        
-        // 初始化AI
-        const ai = new ChessAI('medium');
+    // 当前语言 - 从localStorage读取，默认为'en'
+    let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
 
     const translations = {
         title: { zh: '国际象棋 - 双人对战与人机对战', en: 'Chess - Local and AI Play' },
@@ -105,13 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
         privacyEffective: { zh: '生效日期：2026年5月8日', en: 'Effective Date: May 8, 2026' },
         privacyDesc: { zh: '本隐私政策描述了您使用我们的国际象棋网站时，我们如何收集、使用和保护您的信息。', en: 'This Privacy Policy describes how we collect, use, and protect your information when you use our chess website.' },
         privacyCollect: { zh: '我们收集的信息', en: 'Information We Collect' },
-        privacyCollectText: { zh: '我们的网站设计为在您的浏览器中本地运行，不收集或存储任何个人信息。所有游戏数据、设置和交互都保留在您的设备上。', en: 'Our website is designed to run locally in your browser and does not collect or store any personal information. All game data, settings, and interactions remain on your device.' },
+        privacyCollectText: { zh: '为了改进我们的服务并提供个性化体验，我们通过第三方广告合作伙伴（如Google AdSense）收集某些信息。这包括通过Cookie和类似跟踪技术收集的信息。', en: 'To improve our services and provide personalized experiences, we collect certain information through third-party advertising partners such as Google AdSense. This includes information collected through cookies and similar tracking technologies.' },
         privacyUse: { zh: '我们如何使用信息', en: 'How We Use Information' },
-        privacyUseText: { zh: '由于我们不收集任何数据，因此不存在个人信息的使用。网站完全在客户端运行。', en: 'Since we do not collect any data, there is no usage of personal information. The website functions entirely client-side.' },
+        privacyUseText: { zh: '收集的信息用于：显示相关广告、分析网站使用情况、改进用户体验。广告合作伙伴可能会根据您的浏览行为展示定向广告。', en: 'Collected information is used for: displaying relevant advertisements, analyzing site usage, and improving user experience. Our advertising partners may display targeted ads based on your browsing behavior.' },
+        privacyCookie: { zh: 'Cookie和跟踪技术', en: 'Cookies and Tracking Technologies' },
+        privacyCookieText: { zh: '我们和第三方广告商使用Cookie来跟踪您的活动并为您提供个性化内容。您可以通过浏览器设置控制Cookie。某些Cookie可能是必需的以维持网站功能。', en: 'We and third-party advertisers use cookies to track your activity and provide personalized content. You can control cookies through your browser settings. Some cookies may be necessary to maintain website functionality.' },
         privacySecurity: { zh: '数据安全', en: 'Data Security' },
-        privacySecurityText: { zh: '由于没有数据传输或存储在我们的服务器上，您的隐私得到充分保护。请确保您的本地环境安全。', en: 'As no data is transmitted or stored on our servers, your privacy is fully protected. Please ensure your local environment is secure.' },
+        privacySecurityText: { zh: '我们致力于保护您的数据安全。然而，通过互联网传输的数据无法完全保证安全。', en: 'We are committed to protecting your data security. However, data transmitted over the internet cannot be guaranteed to be completely secure.' },
         privacyThirdParty: { zh: '第三方服务', en: 'Third-Party Services' },
-        privacyThirdPartyText: { zh: '本网站不与任何收集数据的第三方服务集成。', en: 'This website does not integrate with any third-party services that collect data.' },
+        privacyThirdPartyText: { zh: '我们使用第三方广告合作伙伴（如Google AdSense）。这些合作伙伴可能会收集和使用您的信息进行广告投放。详细信息请参考其隐私政策。', en: 'We use third-party advertising partners such as Google AdSense. These partners may collect and use your information for advertising purposes. Please refer to their privacy policies for details.' },
+        privacyYourRights: { zh: '您的权利', en: 'Your Rights' },
+        privacyYourRightsText: { zh: '您有权访问、修改或删除我们持有的关于您的信息。您也可以选择退出个性化广告投放。', en: 'You have the right to access, modify, or delete information we hold about you. You can also opt out of personalized advertising.' },
         privacyChanges: { zh: '政策变更', en: 'Changes to This Policy' },
         privacyChangesText: { zh: '我们可能会不时更新本隐私政策。任何变更将在此页面上反映。', en: 'We may update this Privacy Policy from time to time. Any changes will be reflected on this page.' },
         privacyContact: { zh: '联系我们', en: 'Contact Us' },
@@ -139,11 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setLanguage(lang) {
         currentLanguage = lang;
+        localStorage.setItem('selectedLanguage', lang);
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         translateUI();
-        renderClassicGameList();
-        renderStrategyPage();
-        updateUI();
+        // 仅在主页调用这些函数
+        if (typeof renderClassicGameList === 'function') renderClassicGameList();
+        if (typeof renderStrategyPage === 'function') renderStrategyPage();
+        if (typeof updateUI === 'function') updateUI();
     }
 
     function translateUI() {
@@ -173,7 +158,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 初始化棋盘UI
+    // 立即翻译页面 - 在页面加载时应用已保存的语言
+    translateUI();
+    
+    // 设置语言选择器事件监听（仅在主页有该元素）
+    const languageSelect = document.getElementById('language-select');
+    if (languageSelect) {
+        languageSelect.value = currentLanguage;
+        languageSelect.addEventListener('change', function() {
+            setLanguage(this.value);
+        });
+    }
+
+    // 初始化棋盘UI - 仅在主页执行
+    if (!document.body.classList.contains('game-page')) return;
+    
+    const engine = new ChessEngine();
+    const ai = new ChessAI('medium');
+
     const boardElement = document.getElementById('chessboard');
     const chessboard = new ChessboardUI(boardElement, {
         draggable: true,
