@@ -1132,4 +1132,3 @@ function getChessPieceSVG(color, type) {
 
 // 执行加载棋子图像的函数
 // loadChessPieceImages();
-}); // 关闭DOMContentLoaded
