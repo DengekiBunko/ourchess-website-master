@@ -10,43 +10,47 @@
     <div class="container">
         <header>
             <h1 data-i18n="aboutTitle">About Us</h1>
+            <div class="language-selection">
+                <label for="language-select" data-i18n="languageLabel">Language:</label>
+                <select id="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en" selected>English</option>
+                </select>
+            </div>
         </header>
 
         <main>
             <section class="about-section">
                 <h2 data-i18n="aboutWelcome">Welcome to Our Chess Website</h2>
-                <p data-i18n="aboutIntro">Our chess website is dedicated to providing an engaging and educational platform for chess enthusiasts of all levels. Whether you're a beginner learning the basics or an experienced player honing your skills, we offer tools and resources to enhance your chess journey.</p>
+                <p data-i18n="aboutDesc">Our chess website is dedicated to providing an engaging and educational platform for chess enthusiasts of all levels. Whether you're a beginner learning the basics or an experienced player honing your skills, we offer tools and resources to enhance your chess journey.</p>
 
                 <h3 data-i18n="aboutMission">Our Mission</h3>
                 <p data-i18n="aboutMissionText">To make chess accessible, fun, and educational for everyone. We believe that chess is not just a game, but a way to develop critical thinking, strategy, and patience.</p>
 
                 <h3 data-i18n="aboutFeatures">Features</h3>
                 <ul>
-                    <li data-i18n="aboutLocalMode"><strong>Local Two-Player Mode:</strong> Play against a friend on the same device.</li>
-                    <li data-i18n="aboutAIMode"><strong>AI Opponent:</strong> Challenge yourself against an AI with adjustable difficulty levels.</li>
-                    <li data-i18n="aboutTutorials"><strong>Interactive Tutorials:</strong> Learn the rules, piece movements, and basic strategies.</li>
-                    <li data-i18n="aboutStrategy"><strong>Strategy Articles:</strong> Read in-depth articles on chess tactics and openings.</li>
-                    <li data-i18n="aboutClassic"><strong>Classic Games Replay:</strong> Study famous games and learn from masters.</li>
+                    <li data-i18n="aboutFeature1"><strong>Local Two-Player Mode:</strong> Play against a friend on the same device.</li>
+                    <li data-i18n="aboutFeature2"><strong>AI Opponent:</strong> Challenge yourself against an AI with adjustable difficulty levels.</li>
+                    <li data-i18n="aboutFeature3"><strong>Interactive Tutorials:</strong> Learn the rules, piece movements, and basic strategies.</li>
+                    <li data-i18n="aboutFeature4"><strong>Strategy Articles:</strong> Read in-depth articles on chess tactics and openings.</li>
+                    <li data-i18n="aboutFeature5"><strong>Classic Games Replay:</strong> Study famous games and learn from masters.</li>
                 </ul>
 
                 <h3 data-i18n="aboutTeam">Our Team</h3>
                 <p data-i18n="aboutTeamText">We are a passionate team of chess lovers and developers committed to creating the best chess experience online. Our project is open-source and available on GitHub.</p>
-
-                <h3>Support Through Advertising</h3>
-                <p>This website is supported by advertisements. We work with advertising partners such as Google AdSense to provide relevant ads to our users. This allows us to maintain and improve the service at no cost to you. For more information about how advertising works on our site, please see our Privacy Policy.</p>
             </section>
         </main>
 
         <footer>
-            <nav>
-                <a href="index.html" data-i18n="navHome">Home</a>
-                <a href="about.html" class="active" data-i18n="navAbout">About Us</a>
-                <a href="privacy.html" data-i18n="navPrivacy">Privacy Policy</a>
-                <a href="contact.html" data-i18n="navContact">Contact Us</a>
+            <nav class="footer-nav">
+                <a href="index.html" data-i18n="navHome">首页</a>
+                <a href="about.html" class="active" data-i18n="navAbout">关于我们</a>
+                <a href="privacy.html" data-i18n="navPrivacy">隐私政策</a>
+                <a href="contact.html" data-i18n="navContact">联系我们</a>
             </nav>
         </footer>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/i18n.js"></script>
 </body>
 </html>

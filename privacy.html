@@ -10,35 +10,42 @@
     <div class="container">
         <header>
             <h1 data-i18n="privacyTitle">Privacy Policy</h1>
+            <div class="language-selection">
+                <label for="language-select" data-i18n="languageLabel">Language:</label>
+                <select id="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en" selected>English</option>
+                </select>
+            </div>
         </header>
 
         <main>
             <section class="privacy-section">
                 <h2 data-i18n="privacyTitle">Privacy Policy</h2>
-                <p data-i18n="privacyEffective"><strong>Effective Date:</strong> May 8, 2026</p>
+                <p><strong data-i18n="privacyEffective">Effective Date: May 8, 2026</strong></p>
 
-                <p data-i18n="privacyDesc">This Privacy Policy describes how we collect, use, and protect your information when you use our chess website.</p>
+                <p data-i18n="privacyDesc">This Privacy Policy describes how we collect, use, and protect your information when you use our chess website, including our use of advertising services and cookie technology.</p>
 
                 <h3 data-i18n="privacyCollect">Information We Collect</h3>
-                <p data-i18n="privacyCollectText">To improve our services and provide personalized experiences, we collect certain information through third-party advertising partners such as Google AdSense. This includes information collected through cookies and similar tracking technologies.</p>
+                <p data-i18n="privacyCollectText">Our website game features are designed to run locally in your browser and do not collect or store game-related personal information. All game data, settings, and interactions remain on your device.</p>
+
+                <h3 data-i18n="privacyCookies">Cookies and Advertising</h3>
+                <p data-i18n="privacyCookiesText">We use third-party advertising services (such as Google AdSense) to display ads on our website. These advertising services may use cookies and web beacons to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. The information collected may include your IP address, browser type, time of visit, and content you view on this and other websites.</p>
+
+                <h3 data-i18n="privacyCookiesManage">Managing Cookie Preferences</h3>
+                <p data-i18n="privacyCookiesManageText">You can manage your cookie preferences through your browser settings, including disabling cookies or deleting stored cookies. Please note that disabling cookies may affect some features of the website.</p>
 
                 <h3 data-i18n="privacyUse">How We Use Information</h3>
-                <p data-i18n="privacyUseText">Collected information is used for: displaying relevant advertisements, analyzing site usage, and improving user experience. Our advertising partners may display targeted ads based on your browsing behavior.</p>
-
-                <h3 data-i18n="privacyCookie">Cookies and Tracking Technologies</h3>
-                <p data-i18n="privacyCookieText">We and third-party advertisers use cookies to track your activity and provide personalized content. You can control cookies through your browser settings. Some cookies may be necessary to maintain website functionality.</p>
+                <p data-i18n="privacyUseText">We do not directly collect or store personally identifiable information. Information collected by third-party advertising services is used solely for delivering and optimizing ad display. Game-related data remains entirely on your local device.</p>
 
                 <h3 data-i18n="privacySecurity">Data Security</h3>
-                <p data-i18n="privacySecurityText">We are committed to protecting your data security. However, data transmitted over the internet cannot be guaranteed to be completely secure.</p>
+                <p data-i18n="privacySecurityText">Game data is not transmitted or stored on our servers. For third-party advertising services, they have their own security measures to protect collected data. We recommend that you regularly review the privacy policies of these third-party services to understand their data protection measures.</p>
 
                 <h3 data-i18n="privacyThirdParty">Third-Party Services</h3>
-                <p data-i18n="privacyThirdPartyText">We use third-party advertising partners such as Google AdSense. These partners may collect and use your information for advertising purposes. Please refer to their privacy policies for details.</p>
-
-                <h3 data-i18n="privacyYourRights">Your Rights</h3>
-                <p data-i18n="privacyYourRightsText">You have the right to access, modify, or delete information we hold about you. You can also opt out of personalized advertising.</p>
+                <p data-i18n="privacyThirdPartyText">This website integrates third-party advertising services (such as Google AdSense). These services have their own privacy policies, and we recommend that you review Google's Privacy Policy (https://policies.google.com/privacy) to understand how they collect, use, and protect your information.</p>
 
                 <h3 data-i18n="privacyChanges">Changes to This Policy</h3>
-                <p data-i18n="privacyChangesText">We may update this Privacy Policy from time to time. Any changes will be reflected on this page.</p>
+                <p data-i18n="privacyChangesText">We may update this Privacy Policy from time to time, including changes to our advertising partners or cookie usage policies. Any changes will be reflected on this page, and significant changes will be prominently noted at the top of the page.</p>
 
                 <h3 data-i18n="privacyContact">Contact Us</h3>
                 <p data-i18n="privacyContactText">If you have any questions about this Privacy Policy, please contact us at main@setup.de5.net.</p>
@@ -46,15 +53,15 @@
         </main>
 
         <footer>
-            <nav>
-                <a href="index.html" data-i18n="navHome">Home</a>
-                <a href="about.html" data-i18n="navAbout">About Us</a>
-                <a href="privacy.html" class="active" data-i18n="navPrivacy">Privacy Policy</a>
-                <a href="contact.html" data-i18n="navContact">Contact Us</a>
+            <nav class="footer-nav">
+                <a href="index.html" data-i18n="navHome">首页</a>
+                <a href="about.html" data-i18n="navAbout">关于我们</a>
+                <a href="privacy.html" class="active" data-i18n="navPrivacy">隐私政策</a>
+                <a href="contact.html" data-i18n="navContact">联系我们</a>
             </nav>
         </footer>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/i18n.js"></script>
 </body>
 </html>

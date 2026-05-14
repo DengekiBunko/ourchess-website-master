@@ -10,15 +10,22 @@
     <div class="container">
         <header>
             <h1 data-i18n="contactTitle">Contact Us</h1>
+            <div class="language-selection">
+                <label for="language-select" data-i18n="languageLabel">Language:</label>
+                <select id="language-select">
+                    <option value="zh">中文</option>
+                    <option value="en" selected>English</option>
+                </select>
+            </div>
         </header>
 
         <main>
             <section class="contact-section">
-                <h2 data-i18n="contactTitle">Get in Touch</h2>
-                <p data-i18n="contactIntro">We'd love to hear from you! Whether you have questions, feedback, or suggestions about our chess website, feel free to reach out.</p>
+                <h2 data-i18n="contactGetInTouch">Get in Touch</h2>
+                <p data-i18n="contactDesc">We'd love to hear from you! Whether you have questions, feedback, or suggestions about our chess website, feel free to reach out.</p>
 
                 <h3 data-i18n="contactInfo">Contact Information</h3>
-                <p data-i18n="contactEmail"><strong>Email:</strong> <a href="mailto:main@setup.de5.net">main@setup.de5.net</a></p>
+                <p><strong data-i18n="contactEmailLabel">Email: </strong><a href="mailto:main@setup.de5.net">main@setup.de5.net</a></p>
 
                 <h3 data-i18n="contactHow">How to Reach Us</h3>
                 <p data-i18n="contactHowText">You can send us an email with your inquiries, and we'll get back to you as soon as possible. Please include a clear subject line and detailed message.</p>
@@ -29,15 +36,15 @@
         </main>
 
         <footer>
-            <nav>
-                <a href="index.html" data-i18n="navHome">Home</a>
-                <a href="about.html" data-i18n="navAbout">About Us</a>
-                <a href="privacy.html" data-i18n="navPrivacy">Privacy Policy</a>
-                <a href="contact.html" class="active" data-i18n="navContact">Contact Us</a>
+            <nav class="footer-nav">
+                <a href="index.html" data-i18n="navHome">首页</a>
+                <a href="about.html" data-i18n="navAbout">关于我们</a>
+                <a href="privacy.html" data-i18n="navPrivacy">隐私政策</a>
+                <a href="contact.html" class="active" data-i18n="navContact">联系我们</a>
             </nav>
         </footer>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/i18n.js"></script>
 </body>
 </html>
